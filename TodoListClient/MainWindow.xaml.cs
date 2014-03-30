@@ -33,6 +33,7 @@ namespace TodoListClient
         // The Client ID is used by the application to uniquely identify itself to Azure AD.
         // The Tenant is the name of the Azure AD tenant in which this application is registered.
         // The AAD Instance is the instance of Azure, for example public Azure or Azure China.
+        // The Redirect URI is the URI where Azure AD will return OAuth responses.
         // The Authority is the sign-in URL of the tenant.
         //
         const string aadInstance = "https://login.windows.net/{0}";
@@ -50,7 +51,7 @@ namespace TodoListClient
         const string todoListBaseAddress = "https://localhost:44321";
 
         private HttpClient httpClient = new HttpClient();
-        private AuthenticationContext authContext = new AuthenticationContext(authority);
+        private AuthenticationContext authContext = null;
 
         public MainWindow()
         {
@@ -125,7 +126,7 @@ namespace TodoListClient
             // Once the token has been returned by ADAL, add it to the http authorization header, before making the call to access the To Do list service.
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
 
-            // Call the To Do list web api
+            // Call the To Do list service.
             HttpResponseMessage response = await httpClient.GetAsync(todoListBaseAddress + "/api/todolist");
 
             if (response.IsSuccessStatusCode)
