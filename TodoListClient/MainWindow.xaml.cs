@@ -1,4 +1,20 @@
-﻿using System;
+﻿//----------------------------------------------------------------------------------------------
+//    Copyright 2014 Microsoft Corporation
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//----------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,12 +29,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+// The following using statements were added for this sample.
 using System.Globalization;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Script.Serialization;
 using System.Runtime.InteropServices;
+using System.Configuration;
 
 namespace TodoListClient
 {
@@ -27,8 +45,6 @@ namespace TodoListClient
     /// </summary>
     public partial class MainWindow : Window
     {
-        const int INTERNET_OPTION_END_BROWSER_SESSION = 42;
-
         //
         // The Client ID is used by the application to uniquely identify itself to Azure AD.
         // The Tenant is the name of the Azure AD tenant in which this application is registered.
@@ -36,19 +52,19 @@ namespace TodoListClient
         // The Redirect URI is the URI where Azure AD will return OAuth responses.
         // The Authority is the sign-in URL of the tenant.
         //
-        const string aadInstance = "https://login.windows.net/{0}";
-        const string tenant = "skwantoso.com";
-        const string clientId = "fb715b0e-3ca9-45b8-9928-2329a776b42d";
-        Uri redirectUri = new Uri("http://TodoListClient");
+        private static string aadInstance = ConfigurationManager.AppSettings["ida:AADInstance"];
+        private static string tenant = ConfigurationManager.AppSettings["ida:Tenant"];
+        private static string clientId = ConfigurationManager.AppSettings["ida:ClientId"];
+        Uri redirectUri = new Uri(ConfigurationManager.AppSettings["ida:RedirectUri"]);
 
-        static string authority = String.Format(CultureInfo.InvariantCulture, aadInstance, tenant);
+        private static string authority = String.Format(CultureInfo.InvariantCulture, aadInstance, tenant);
 
         //
         // To authenticate to the To Do list service, the client needs to know the service's App ID URI.
         // To contact the To Do list service we need it's URL as well.
         //
-        const string todoListResourceId = "https://skwantoso.com/TodoListService";
-        const string todoListBaseAddress = "https://localhost:44321";
+        private static string todoListResourceId = ConfigurationManager.AppSettings["todo:TodoListResourceId"];
+        private static string todoListBaseAddress = ConfigurationManager.AppSettings["todo:TodoListBaseAddress"];
 
         private HttpClient httpClient = new HttpClient();
         private AuthenticationContext authContext = null;
@@ -219,6 +235,8 @@ namespace TodoListClient
             {
                 TodoList.ItemsSource = string.Empty;
                 authContext.TokenCacheStore.Clear();
+                // Also clear cookies from the browser control.
+                ClearCookies();
                 SignInButton.Content = "Sign In";
                 return;
             }
@@ -254,17 +272,12 @@ namespace TodoListClient
                 return;
             }
 
-            // Uncomment this next line if you want to clear all of the state from the browser control used by ADAL.
-            // ClearCookies();
         }
 
-        //
         // This function clears cookies from the browser control used by ADAL.
-        // It is provided here for reference in case you want to reset the cookie state of the browser control.
-        // It is not used by default in this sample.
-        //
         private void ClearCookies()
         {
+            const int INTERNET_OPTION_END_BROWSER_SESSION = 42;
             InternetSetOption(IntPtr.Zero, INTERNET_OPTION_END_BROWSER_SESSION, IntPtr.Zero, 0);
         }
 

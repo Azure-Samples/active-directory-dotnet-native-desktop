@@ -94,10 +94,12 @@ There are two projects in this sample.  Each needs to be separately registered i
 
 #### Configure the TodoListClient project
 
-1. Open `MainPage.xaml.cs'.
-2. Find the declaration of `tenant` and replace the value with the name of your Azure AD tenant.
-3. Find the declaration of `clientId` and replace the value with the Client ID from the Azure portal.
-4. Find the declaration of `todoListResourceId` and `todoListBaseAddress` and ensure their values are set properly for your TodoListService project.
+1. Open `app.config'.
+2. Find the app key `ida:Tenant` and replace the value with your AAD tenant name.
+3. Find the app key `ida:ClientId` and replace the value with the Client ID for the TodoListClient from the Azure portal.
+4. Find the app key `ida:RedirectUri` and replace the value with the Redirect URI for the TodoListClient from the Azure portal, for example `http://TodoListClient`.
+5. Find the app key `todo:TodoListResourceId` and replace the value with the  App ID URI of the TodoListService, for example `https://<your_tenant_name>/TodoListService`
+6. Find the app key `todo:TodoListBaseAddress` and replace the value with the base address of the TodoListService project.
 
 ### Step 5:  Trust the IIS Express SSL certificate
 
@@ -133,11 +135,12 @@ First, in Visual Studio 2013 create an empty solution to host the  projects.  Th
 
 1. In the solution, create a new Windows --> WPF Application called TodoListClient.
 2. Add the (stable) Active Directory Authentication Library (ADAL) NuGet, Microsoft.IdentityModel.Clients.ActiveDirectory, version 1.0.3 (or higher) to the project.
-3. Add  assembly references to `System.Net.Http` and `System.Web.Extensions`.
+3. Add  assembly references to `System.Net.Http`, `System.Web.Extensions`, and `System.Configuration`.
 4. Add a new class to the project called `TodoItem.cs`.  Copy the code from the sample project file of same name into this class, completely replacing the code in the file in the new project.
 5. Add a new class to the project called `CacheHelper.cs`.  Copy the code from the sample project file of same name into this class, completely replacing the code in the file in the new project.
 6. Add a new class to the project called `CredManCache.cs`.  Copy the code from the sample project file of same name into this class, completely replacing the code in the file in the new project.
 7. Copy the markup from `MainWindow.xaml' in the sample project into the file of same name in the new project, completely replacing the markup in the file in the new project.
 8. Copy the code from `MainWindow.xaml.cs` in the sample project into the file of same name in the new project, completely replacing the code in the file in the new project.
+9. In `app.config` create keys for `ida:AADInstance`, `ida:Tenant`, `ida:ClientId`, `ida:RedirectUri`, `todo:TodoListResourceId`, and `todo:TodoListBaseAddress` and set them accordingly.  For the public Azure cloud, the value of `ida:AADInstance` is `https://login.windows.net/{0}`.
 
 Finally, in the properties of the solution itself, set both projects as startup projects.
