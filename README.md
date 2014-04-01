@@ -3,7 +3,7 @@ NativeClient-DotNet
 
 This sample demonstrates a .Net WPF application calling a web API that is secured using Azure AD. The .Net application uses the Active Directory Authentication Library (ADAL) to obtain a JWT access token through the OAuth 2.0 protocol. The access token is sent to the web API to authenticate the user.
 
-For more information about how the protocols work in this scenario and other scenarios, see the [Authentication Scenarios for Azure AD](http://msdn.microsoft.com/aad) document.
+For more information about how the protocols work in this scenario and other scenarios, see [Authentication Scenarios for Azure AD](http://go.microsoft.com/fwlink/?LinkId=394414).
 
 ## How To Run This Sample
 

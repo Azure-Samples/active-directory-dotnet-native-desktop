@@ -205,8 +205,6 @@ namespace TodoListClient
             //
             // Call the To Do service.
             //
-            TodoItem item = new TodoItem();
-            item.Title = TodoText.Text;
 
             // Once the token has been returned by ADAL, add it to the http authorization header, before making the call to access the To Do service.
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
