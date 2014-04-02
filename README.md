@@ -103,9 +103,11 @@ There are two projects in this sample.  Each needs to be separately registered i
 
 ### Step 5:  Trust the IIS Express SSL certificate
 
-Since the web API is SSL protected, the client of the API (the web app) will refuse the SSL connection to the web API unless it trusts the API's SSL certificate.  Use the following steps in Windows Powershell to trust the IIS Express SSL certificate.  You only need to do this once.  If you fail to do this step, calls to the TodoListService will always fail with Access Denied.
+Since the web API is SSL protected, the client of the API (the web app) will refuse the SSL connection to the web API unless it trusts the API's SSL certificate.  Use the following steps in Windows Powershell to trust the IIS Express SSL certificate.  You only need to do this once.  If you fail to do this step, calls to the TodoListService will always throw an unhandled exception where the inner exception message is:
 
-Begin by opening a Windows Powershell command window as Administrator.
+"The underlying connection was closed: Could not establish trust relationship for the SSL/TLS secure channel."
+
+To configure your computer to trust the IIS Express SSL certificate, begin by opening a Windows Powershell command window as Administrator.
 
 Query your personal certificate store to find the thumbprint of the certificate for `CN=localhost`:
 
@@ -130,6 +132,10 @@ PS C:\windows\system32> $store.Open("ReadWrite")
 PS C:\windows\system32> $store.Add($cert)
 PS C:\windows\system32> $store.Close()
 ```
+
+You can verify the certificate is in the Trusted Root store by running this command:
+
+`PS C:\windows\system32> dir Cert:\LocalMachine\Root`
 
 ### Step 6:  Run the sample
 
