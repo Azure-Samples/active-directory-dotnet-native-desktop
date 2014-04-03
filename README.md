@@ -94,7 +94,7 @@ There are two projects in this sample.  Each needs to be separately registered i
 
 #### Configure the TodoListClient project
 
-1. Open `app.config'.
+1. Open `app.config`.
 2. Find the app key `ida:Tenant` and replace the value with your AAD tenant name.
 3. Find the app key `ida:ClientId` and replace the value with the Client ID for the TodoListClient from the Azure portal.
 4. Find the app key `ida:RedirectUri` and replace the value with the Redirect URI for the TodoListClient from the Azure portal, for example `http://TodoListClient`.
