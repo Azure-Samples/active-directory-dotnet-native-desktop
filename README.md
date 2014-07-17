@@ -1,7 +1,7 @@
-NativeClient-DotNet
-===================
+WebApp-WebAPI-OpenIDConnect-DotNet
+==================================
 
-This sample demonstrates a .Net WPF application calling a web API that is secured using Azure AD. The .Net application uses the Active Directory Authentication Library (ADAL) to obtain a JWT access token through the OAuth 2.0 protocol. The access token is sent to the web API to authenticate the user.
+This sample shows how to build an MVC web application that uses Azure AD for sign-in using the OpenID Connect protocol, and then calls a web API under the signed-in user's identity using tokens obtained via OAuth 2.0. This sample uses the OpenID Connect ASP.Net OWIN middleware and ADAL .Net.
 
 For more information about how the protocols work in this scenario and other scenarios, see [Authentication Scenarios for Azure AD](http://go.microsoft.com/fwlink/?LinkId=394414).
 
@@ -18,7 +18,7 @@ Every Azure subscription has an associated Azure Active Directory tenant.  If yo
 
 From your shell or command line:
 
-`git clone git@github.com:AzureADSamples/NativeClient-DotNet.git`
+`git clone git@github.com:AzureADSamples/WebApp-WebAPI-OpenIDConnect-DotNet.git`
 
 ### Step 2:  Create a user account in your Azure Active Directory tenant
 
@@ -68,7 +68,7 @@ There are two projects in this sample.  Each needs to be separately registered i
 ],
 ```
 
-#### Register the TodoListClient app
+#### Register the TodoListWebApp web app
 
 1. Sign in to the [Azure management portal](https://manage.windowsazure.com).
 2. Click on Active Directory in the left hand nav.
@@ -76,11 +76,13 @@ There are two projects in this sample.  Each needs to be separately registered i
 4. Click the Applications tab.
 5. In the drawer, click Add.
 6. Click "Add an application my organization is developing".
-7. Enter a friendly name for the application, for example "TodoListClient-DotNet", select "Native Client Application", and click next.
-8. For the Redirect URI, enter `http://TodoListClient`.  Click finish.
-9. Click the Configure tab of the application.
-10. Find the Client ID value and copy it aside, you will need this later when configuring your application.
-11. In "Permissions to Other Applications", select the TodoListService, and request the delegated permission "Have full access to the To Do List service".  Save the configuration.
+7. Enter a friendly name for the application, for example "TodoListWebApp", select "Web Application and/or Web API", and click next.
+8. For the sign-on URL, enter the base URL for the sample, which is by default `https://localhost:44322/`.  NOTE:  It is important, due to the way Azure AD matches URLs, to ensure there is a trailing slash on the end of this URL.  If you don't include the trailing slash, you will receive an error when the application attempts to redeem an authorization code.
+9. For the App ID URI, enter `https://<your_tenant_name>/TodoListWebApp`, replacing `<your_tenant_name>` with the name of your Azure AD tenant.  Click OK to complete the registration.
+10. While still in the Azure portal, click the Configure tab of your application.
+11. Find the Client ID value and copy it aside, you will need this later when configuring your application.
+12. Create a new key for the application.  Save the configuration so you can view the key value.  Save this aside for when you configure the project in Visual Studio.
+13. In the Permissions to Other Applications configuration section, select the TodoListService application, and add the full access delegated permission.  Save the configuration.
 
 ### Step 4:  Configure the sample to use your Azure AD tenant
 
@@ -92,14 +94,16 @@ There are two projects in this sample.  Each needs to be separately registered i
 4. Find the app key `ida:Audience` and replace the value with the App ID URI you registered earlier, for example `https://<your_tenant_name>/TodoListService`.
 5. Find the app key `ida:ClientId` and replace the value with the Client ID for the TodoListService from the Azure portal.
 
-#### Configure the TodoListClient project
+#### Configure the TodoListWebApp project
 
-1. Open `app.config`.
-2. Find the app key `ida:Tenant` and replace the value with your AAD tenant name.
-3. Find the app key `ida:ClientId` and replace the value with the Client ID for the TodoListClient from the Azure portal.
-4. Find the app key `ida:RedirectUri` and replace the value with the Redirect URI for the TodoListClient from the Azure portal, for example `http://TodoListClient`.
-5. Find the app key `todo:TodoListResourceId` and replace the value with the  App ID URI of the TodoListService, for example `https://<your_tenant_name>/TodoListService`
-6. Find the app key `todo:TodoListBaseAddress` and replace the value with the base address of the TodoListService project.
+1. Open the solution in Visual Studio 2013.
+2. Open the `web.config` file.
+3. Find the app key `ida:Tenant` and replace the value with your AAD tenant name.
+4. Find the app key `ida:ClientId` and replace the value with the Client ID for the TodoListWebApp from the Azure portal.
+5. Find the app key `ida:AppKey` and replace the value with the key for the TodoListWebApp from the Azure portal.
+6. If you changed the base URL of the TodoListWebApp sample, find the app key `ida:PostLogoutRedirectUri` and replace the value with the new base URL of the sample.
+7. Find the app key `todo:TodoListBaseAdress` ane make sure it has the correct value for the address of the TodoListService project.
+8. Find the app key `todo:TodoListResourceId` and replace the value with the App ID URI registered for the TodoListService, for example `https://<your_tenant_name>/TodoListService`.
 
 ### Step 5:  Trust the IIS Express SSL certificate
 
@@ -141,11 +145,11 @@ You can verify the certificate is in the Trusted Root store by running this comm
 
 Clean the solution, rebuild the solution, and run it.  You might want to go into the solution properties and set both projects as startup projects, with the service project starting first.
 
-Explore the sample by signing in, adding items to the To Do list, removing the user account, and starting again.  Notice that if you stop the application without removing the user account, the next time you run the application you won't be prompted to sign-in again - that is the sample implements a persistent cache for ADAL, and remembers the tokens from the previous run.
+Explore the sample by signing in, clicking the User Profile and To Do List links, adding items to the To Do list, signing out, and starting again.
 
 ## How To Deploy This Sample to Azure
 
-To deploy the TodoListService to Azure Web Sites, you will create a web site, publish the TodoListService to the web site, and update the TodoListClient to call the web site instead of IIS Express.
+To deploy the TodoListService and TodoListWebApp to Azure Web Sites, you will create two web sites, publish each project to a web site, and update the TodoListWebApp to call the web site instead of IIS Express.
 
 ### Create and Publish the TodoListService to an Azure Web Site
 
@@ -158,11 +162,33 @@ To deploy the TodoListService to Azure Web Sites, you will create a web site, pu
 7. On the Settings tab, make sure Enable Organizational Authentication is NOT selected.  Click Publish.
 8. Visual Studio will publish the project and automatically open a browser to the URL of the project.  If you see the default web page of the project, the publication was successful.
 
-### Update the TodoListClient to call the TodoListService Running in Azure Web Sites
+### Create a TodoListWebApp Azure Web Site
 
-1. In Visual Studio, go to the TodoListClient project.
-2. Open `app.config`.  Only one change is needed - update the `todo:TodoListBaseAddress` key value to be the address of the website you published, e.g. https://todolistservice-skwantoso.azurewebsites.net.
-3. Run the client!  If you are trying multiple different client types (e.g. .Net, Windows Store, Android, iOS) you can have them all call this one published web API.
+1. Navigate to the [Azure management portal](https://manage.windowsazure.com).
+2. Click on Web Sites in the left hand nav.
+3. Click New in the bottom left hand corner, select Compute --> Web Site --> Quick Create, select the hosting plan and region, and give your web site a name, e.g. todolistwebapp-contoso.azurewebsites.net.  Click Create Web Site.
+4. Once the web site is created, click on it to manage it.  For this set of steps, download the publish profile and save it.  Other deployment mechanisms, such as from source control, can also be used.
+
+### Update the TodoListWebApp to call the TodoListService Running in Azure Web Sites
+
+1. In Visual Studio, go to the TodoListWebApp project.
+2. Open `web.config`.  Two changes are needed - first, update the `todo:TodoListBaseAddress` key value to be the address of the website you published, e.g. https://todolistservice-skwantoso.azurewebsites.net.  Second, update the `ida:PostLogoutRedirectUri` key value to be the address of website you published, e.g. https://todolistwebapp-skwantoso.azurewebsites.net.
+
+### Update the Application Configurations in the Directory Tenant
+
+1. Navigate to the [Azure management portal](https://manage.windowsazure.com).
+2. In the left hand nav, clink on Active Directory and select your tenant.
+3. On the applications tab, select the TodoListService application.
+4. On the Configure tab, update the Sign-On URL and Reply URL fields to the address of your service, for example https://todolistservice-skwantoso.azurewebsites.net.  Save the configuration.
+5. Navigate to the TodoListWebApp application within your Active Directory tenant.
+6. On the Configure tab, update the Sign-On URL and the Reply URL fields to the address of your web app, for example https://todolistwebapp-skwantoso.azurewebsites.net.  Save the configuration.
+
+### Publish the TodoListWebApp to the Azure Web Site
+
+1. In Visual Studio, right click on the TodoListWebApp project in the Solution Explorer and select Publish.  Click Import, and import the publish profile that you downloaded.
+2. On the Connection tab, update the Destination URL so that it is https, for example https://todolistwebapp-skwantoso.azurewebsites.net.  Click Next.
+3. On the Settings tab, make sure Enable Organizational Authentication is NOT selected.  Click Publish.
+4. Visual Studio will publish the project and automatically open a browser to the URL of the project.  If you see the default web page of the project, the publication was successful.
 
 NOTE:  Remember, the To Do list is stored in memory in this TodoListService sample.  Azure Web Sites will spin down your web site if it is inactive, and your To Do list will get emptied.  Also, if you increase the instance count of the web site, requests will be distributed among the instances and the To Do will not be the same on each instance.
 
@@ -182,16 +208,30 @@ First, in Visual Studio 2013 create an empty solution to host the  projects.  Th
 4. Copy the implementation of the TodoListController from this sample into the controller.  Don't forget to add the `[Authorize]` attribute to the class.
 5. In `TodoListController` resolving missing references by adding `using` statements for `System.Collections.Concurrent`, `TodoListService.Models`, `System.Security.Claims`.
 
-### Creating the TodoListClient Project
+### Creating the TodoListWebApp Project
 
-1. In the solution, create a new Windows --> WPF Application called TodoListClient.
-2. Add the (stable) Active Directory Authentication Library (ADAL) NuGet, Microsoft.IdentityModel.Clients.ActiveDirectory, version 1.0.3 (or higher) to the project.
-3. Add  assembly references to `System.Net.Http`, `System.Web.Extensions`, and `System.Configuration`.
-4. Add a new class to the project called `TodoItem.cs`.  Copy the code from the sample project file of same name into this class, completely replacing the code in the file in the new project.
-5. Add a new class to the project called `CacheHelper.cs`.  Copy the code from the sample project file of same name into this class, completely replacing the code in the file in the new project.
-6. Add a new class to the project called `CredManCache.cs`.  Copy the code from the sample project file of same name into this class, completely replacing the code in the file in the new project.
-7. Copy the markup from `MainWindow.xaml' in the sample project into the file of same name in the new project, completely replacing the markup in the file in the new project.
-8. Copy the code from `MainWindow.xaml.cs` in the sample project into the file of same name in the new project, completely replacing the code in the file in the new project.
-9. In `app.config` create keys for `ida:AADInstance`, `ida:Tenant`, `ida:ClientId`, `ida:RedirectUri`, `todo:TodoListResourceId`, and `todo:TodoListBaseAddress` and set them accordingly.  For the public Azure cloud, the value of `ida:AADInstance` is `https://login.windows.net/{0}`.
+1. In the solution, create a new ASP.Net MVC web application called TodoListWebApp with Authentication set to No Authentication.
+2. Set SSL Enabled to be True.  Note the SSL URL.
+3. In the project properties, Web properties, set the Project Url to be the SSL URL.
+4. Add the following ASP.Net OWIN middleware NuGets: Microsoft.IdentityModel.Protocol.Extensions, System.IdentityModel.Tokens.Jwt, Microsoft.Owin.Security.OpenIdConnect, Microsoft.Owin.Security.Cookies, Microsoft.Owin.Host.SystemWeb.
+5. Add the Active Directory Authentication Library NuGet (`Microsoft.IdentityModel.Clients.ActiveDirectory`).
+6. In the `App_Start` folder, create a class `Startup.Auth.cs`.  You will need to remove `.App_Start` from the namespace name.  Replace the code for the `Startup` class with the code from the same file of the sample app.  Be sure to take the whole class definition!  The definition changes from `public class Startup` to `public partial class Startup`.
+7. Right-click on the project, select Add,  select "OWIN Startup class", and name the class "Startup".  If "OWIN Startup Class" doesn't appear in the menu, instead select "Class", and in the search box enter "OWIN".  "OWIN Startup class" will appear as a selection; select it, and name the class `Startup.cs`.
+8. In `Startup.cs`, replace the code for the `Startup` class with the code from the same file of the sample app.  Again, note the definition changes from `public class Startup` to `public partial class Startup`.
+9. In the `Views` --> `Shared` folder, create a new partial view `_LoginPartial.cshtml`.  Replace the contents of the file with the contents of the file of same name from the sample.
+10. In the `Views` --> `Shared` folder, replace the contents of `_Layout.cshtml` with the contents of the file of same name from the sample.  Effectively, all this will do is add a single line, `@Html.Partial("_LoginPartial")`, that lights up the previously added `_LoginPartial` view.
+11. Create a new empty controller called `AccountController`.  Replace the implementation with the contents of the file of same name from the sample.
+12. If you want the user to be required to sign-in before they can see any page of the app, then in the `HomeController`, decorate the `HomeController` class with the `[Authorize]` attribute.  If you leave this out, the user will be able to see the home page of the app without having to sign-in first, and can click the sign-in link on that page to get signed in.
+13. In the `Models` folder add a new class called `TodoItem.cs`.  Copy the implementation of TodoItem from this sample into the class.
+14. In the `Models` folder add a new class called `UserProfile.cs`.  Copy the implementation of UserProfile from this sample into the class.
+15. In the project, create a new folder called `Utils`.  In the folder, create a new class called `NaiveSessionCache.cs`.  Copy the implementation of the class from the sample.
+16. Add a new empty MVC5 controller TodoListController to the project.  Copy the implementation of the controller from the sample.  Remember to include the [Authorize] attribute on the class definition.
+17. Add a new empty MVC5 controller UserProfileController to the project.  Copy the implementation of the controller from the sample.  Again, remember to include the [Authorize] attribute on the class definition.
+18. In `Views` --> `TodoList` create a new view, `Index.cshtml`, and copy the implementation from this sample.
+19. In `Views` --> `UserProfile` create a new view, `Index.cshtml`, and copy the implementation from this sample.
+20. In the shared `_Layout` view, make sure the Action Links for Profile and To Do List that are in the sample have been added.
+21. In `web.config`, in `<appSettings>`, create keys for `ida:ClientId`, `ida:AppKey`, `ida:AADInstance`, `ida:Tenant`, `ida:PostLogoutRedirectUri`, `ida:GraphResourceId`, and `ida:GraphUserUrl` and set the values accordingly.  For the public Azure AD, the value of `ida:AADInstance` is `https://login.windows.net/{0}` the value of `ida:GraphResourceId` is `https://graph.windows.net`, and the value of `ida:GraphUserUrl` is `https://graph.windows.net/{0}/me?api-version=2013-11-08`.
+22. In `web.config` in `<appSettings>`, create keys for `todo:TodoListResourceId` and `todo:TodoListBaseAddress` and set the values accordinly.
+23. In `web.config` add this line in the `<system.web>` section: `<sessionState timeout="525600" />`.  This increases the ASP.Net session state timeout to it's maximum value so that access tokens and refresh tokens cache in session state aren't cleared after the default timeout of 20 minutes.
 
 Finally, in the properties of the solution itself, set both projects as startup projects.
