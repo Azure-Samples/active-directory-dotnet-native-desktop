@@ -12,7 +12,7 @@ To run this sample you will need:
 - An Internet connection
 - An Azure subscription (a free trial is sufficient)
 
-Every Azure subscription has an associated Azure Active Directory tenant.  If you don't already have an Azure subscription, you can get a free subscription by signing up at [http://wwww.windowsazure.com](http://www.windowsazure.com).  All of the Azure AD features used by this sample are available free of charge.
+Every Azure subscription has an associated Azure Active Directory tenant.  If you don't already have an Azure subscription, you can get a free subscription by signing up at [http://www.windowsazure.com](http://www.windowsazure.com).  All of the Azure AD features used by this sample are available free of charge.
 
 ### Step 1:  Clone or download this repository
 
@@ -43,7 +43,7 @@ There are two projects in this sample.  Each needs to be separately registered i
 11. Find the Client ID value and copy it aside, you will need this later when configuring your application.
 12. Using the Manage Manifest button in the drawer, download the manifest file for the application.
 13. Add a permission to the application by replacing the appPermissions section with the block of JSON below.  You will need to create a new GUID and replace the example permissionId GUID.
-14. Using the Manage Manfiest button, upload the updated manifest file.  Save the configuration of the app.
+14. Using the Manage Manifest button, upload the updated manifest file.  Save the configuration of the app.
 
 ```JSON
 "oauth2Permissions": [
@@ -90,7 +90,7 @@ There are two projects in this sample.  Each needs to be separately registered i
 2. Find the app key `ida:Tenant` and replace the value with your AAD tenant name.
 3. Find the app key `ida:ClientId` and replace the value with the Client ID for the TodoListClient from the Azure portal.
 4. Find the app key `ida:RedirectUri` and replace the value with the Redirect URI for the TodoListClient from the Azure portal, for example `http://TodoListClient`.
-5. Find the app key `todo:TodoListResourceId` and replace the value with the  App ID URI of the TodoListService, for example `https://<your_tenant_name>/TodoListService`
+5. Find the app key `todo:TodoListResourceId` and replace the value with the App ID URI of the TodoListService, for example `https://<your_tenant_name>/TodoListService`
 6. Find the app key `todo:TodoListBaseAddress` and replace the value with the base address of the TodoListService project.
 
 ### Step 5:  Trust the IIS Express SSL certificate
