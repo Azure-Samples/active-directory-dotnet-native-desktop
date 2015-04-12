@@ -80,8 +80,6 @@ namespace TodoListClient
             AuthenticationResult result = null;
             try
             {
-                
-                //result = authContext.AcquireToken(todoListResourceId, clientId, redirectUri);
                 result = authContext.AcquireToken(todoListResourceId, clientId, redirectUri, PromptBehavior.Never);
 
                 // A valid token is in the cache - get the To Do list.
