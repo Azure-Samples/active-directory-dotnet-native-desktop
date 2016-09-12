@@ -122,7 +122,6 @@ To deploy the TodoListService to Azure Web Sites, you will create a web site, pu
 
 ### Create and Publish the TodoListService to an Azure Web Site
 
-
 1. Sign in to the [Azure portal](https://portal.azure.com).
 2. Click New in the top left hand corner, select Web + Mobile --> Web App, select the hosting plan and region, and give your web site a name, e.g. todolistservice-contoso.azurewebsites.net.  Click Create Web Site.
 3. Once the web site is created, click on it to manage it.  For this set of steps, download the publish profile and save it.  Other deployment mechanisms, such as from source control, can also be used.
