@@ -90,6 +90,7 @@ namespace TodoListClient
             try
             {
                 result = await authContext.AcquireTokenAsync(todoListResourceId, clientId, redirectUri, new PlatformParameters(PromptBehavior.Never));
+                this.SetUserName(result.UserInfo);
                 SignInButton.Content = "Clear Cache";
             }
             catch (AdalException ex)
@@ -113,6 +114,8 @@ namespace TodoListClient
                     }
                     MessageBox.Show(message);
                 }
+
+                UserName.Content = Properties.Resources.UserNotSignedIn;
 
                 return;
             }
@@ -156,6 +159,7 @@ namespace TodoListClient
             try
             {
                 result = await authContext.AcquireTokenAsync(todoListResourceId, clientId, redirectUri, new PlatformParameters(PromptBehavior.Never));
+                this.SetUserName(result.UserInfo);
             }
             catch (AdalException ex)
             {
@@ -176,6 +180,8 @@ namespace TodoListClient
 
                     MessageBox.Show(message);
                 }
+
+                UserName.Content = Properties.Resources.UserNotSignedIn;
 
                 return;
             }
@@ -213,6 +219,7 @@ namespace TodoListClient
                 authContext.TokenCache.Clear();
                 // Also clear cookies from the browser control.
                 ClearCookies();
+                UserName.Content = Properties.Resources.UserNotSignedIn;
                 SignInButton.Content = "Sign In";
                 return;
             }
@@ -224,6 +231,7 @@ namespace TodoListClient
             try
             {
                 result = await authContext.AcquireTokenAsync(todoListResourceId, clientId, redirectUri, new PlatformParameters(PromptBehavior.Always));
+                this.SetUserName(result.UserInfo);
                 SignInButton.Content = "Clear Cache";
                 GetTodoList();
             }
@@ -245,6 +253,8 @@ namespace TodoListClient
                     MessageBox.Show(message);
                 }
 
+                UserName.Content = Properties.Resources.UserNotSignedIn;
+
                 return;
             }
 
@@ -255,6 +265,35 @@ namespace TodoListClient
         {
             const int INTERNET_OPTION_END_BROWSER_SESSION = 42;
             InternetSetOption(IntPtr.Zero, INTERNET_OPTION_END_BROWSER_SESSION, IntPtr.Zero, 0);
+        }
+
+        // Set user name to text box
+        private void SetUserName(UserInfo userInfo)
+        {
+            string userName = null;
+
+            if (userInfo != null)
+            {
+                if (userInfo.GivenName != null && userInfo.FamilyName != null) {
+                    userName = userInfo.GivenName + " " + userInfo.FamilyName;
+                }
+                else if (userInfo.FamilyName != null) {
+                    userName = userInfo.FamilyName;
+                }
+                else if (userInfo.GivenName != null)
+                {
+                    userName = userInfo.GivenName;
+                }
+                else if (userInfo.UniqueId != null)
+                {
+                    userName = userInfo.UniqueId;
+                }
+            }
+
+            if (userName == null)
+                userName = Properties.Resources.UserNotIdentified;
+
+            UserName.Content = userName;
         }
 
         [DllImport("wininet.dll", SetLastError = true)]
