@@ -102,6 +102,8 @@ PS C:\windows\system32> $store.Add($cert)
 PS C:\windows\system32> $store.Close()
 ```
 
+**NOTE:** If you receive an "Access is denied" error on the `$store.Open("ReadWrite")` cmdlet, you may need to run your PowerShell session under "Run as Administrator". 
+
 You can verify the certificate is in the Trusted Root store by running this command:
 
 `PS C:\windows\system32> dir Cert:\LocalMachine\Root`
