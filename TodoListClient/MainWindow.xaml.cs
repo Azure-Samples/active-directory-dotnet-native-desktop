@@ -92,6 +92,7 @@ namespace TodoListClient
             {
                 result = await authContext.AcquireTokenSilentAsync(todoListResourceId, clientId);
                 SignInButton.Content = clearCacheString;
+                this.SetUserName(result.UserInfo);
             }
             catch (AdalException ex)
             {
@@ -114,6 +115,8 @@ namespace TodoListClient
                     }
                     MessageBox.Show(message);
                 }
+
+                UserName.Content = Properties.Resources.UserNotSignedIn;
 
                 return;
             }
@@ -157,6 +160,7 @@ namespace TodoListClient
             try
             {
                 result = await authContext.AcquireTokenSilentAsync(todoListResourceId, clientId);
+                this.SetUserName(result.UserInfo);
             }
             catch (AdalException ex)
             {
@@ -177,6 +181,8 @@ namespace TodoListClient
 
                     MessageBox.Show(message);
                 }
+
+                UserName.Content = Properties.Resources.UserNotSignedIn;
 
                 return;
             }
@@ -214,6 +220,7 @@ namespace TodoListClient
                 authContext.TokenCache.Clear();
                 // Also clear cookies from the browser control.
                 SignInButton.Content = signInString;
+                UserName.Content = Properties.Resources.UserNotSignedIn;
                 return;
             }
 
@@ -227,6 +234,7 @@ namespace TodoListClient
                 // would re-sign-in the same user
                 result = await authContext.AcquireTokenAsync(todoListResourceId, clientId, redirectUri, new PlatformParameters(PromptBehavior.Always));
                 SignInButton.Content = clearCacheString;
+                SetUserName(result.UserInfo);
                 GetTodoList();
             }
             catch (AdalException ex)
@@ -247,10 +255,42 @@ namespace TodoListClient
                     MessageBox.Show(message);
                 }
 
+                UserName.Content = Properties.Resources.UserNotSignedIn;
+
                 return;
             }
 
         }
 
+        // Set user name to text box
+        private void SetUserName(UserInfo userInfo)
+        {
+            string userName = null;
+
+            if (userInfo != null)
+            {
+                if (userInfo.GivenName != null && userInfo.FamilyName != null)
+                {
+                    userName = userInfo.GivenName + " " + userInfo.FamilyName;
+                }
+                else if (userInfo.FamilyName != null)
+                {
+                    userName = userInfo.FamilyName;
+                }
+                else if (userInfo.GivenName != null)
+                {
+                    userName = userInfo.GivenName;
+                }
+                else if (userInfo.UniqueId != null)
+                {
+                    userName = userInfo.UniqueId;
+                }
+            }
+
+            if (userName == null)
+                userName = Properties.Resources.UserNotIdentified;
+
+            UserName.Content = userName;
+        }
     }
 }
