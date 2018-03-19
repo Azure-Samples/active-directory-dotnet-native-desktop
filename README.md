@@ -11,12 +11,12 @@ endpoint: AAD V1
 ## About this sample
 ### Scenario
 This sample demonstrates a .Net WPF application calling a web API that is secured using Azure AD. 
-1. The .Net application uses the Active Directory Authentication Library (ADAL) to obtain a JWT access token through the OAuth 2.0 protocol. 
-2. The access token is sent to the web API to authenticate the user.
+1. The .Net TodoListClient WPF application uses the Active Directory Authentication Library (ADAL) to obtain a JWT access token from Azure Active Directory (Azure AD) through the OAuth 2.0 protocol:
+2. The access token is used as a bearer token to authenticate the user when calling the /todolist endpoint of the TodoListService web API.
 
 ![Topology](./ReadmeFiles/topology.png)
 
-Once the TodolistService run, the user of the TodoList client WPF application can *sign-in* and then enter items in a todo list. When the application is closed and re-open the list is displayed as long as the service is still runnin, until the user clicks on *clear cache*. At this point the user will need to sign-in again
+Once you have started the TodolistService, you can run the TodoListClient WPF application, click on *sign-in* and then enter items in a todo list. When you close the application and re-open it, the list is displayed as long as the service is still running, and tis until you click on *clear cache*. At this point you will need to sign-in again (and can use another identity)
 
 ![TodoListClient](./ReadmeFiles/TodolistClient.png)
 
@@ -41,8 +41,8 @@ From your shell or command line:
 ### Step 2:  Register the sample with your Azure Active Directory tenant
 
 There are two options:
- - Option 1: you run the `AppCreationScripts\Configure.ps1` PowerShell script which creates two applications in the Azure Active Directory, (one for the client and one for the service), and then updates the configuration files in the Visual Studio projects to point to those two newly created apps. Instructions are provided in the [Configure.ps1](https://github.com/Azure-Samples/active-directory-dotnet-native-headless/blob/bd7479968c6f56d25759ab30aabda5e77e9484c3/AppCreationScripts/Configure.ps1#L2-L29) file
- - Option 2: you do the same manually. This is what is explained below in this Step 2 section:
+ - Option 1: you run the `AppCreationScripts\Configure.ps1` PowerShell script which creates two applications in the Azure Active Directory, (one for the client and one for the service), and then updates the configuration files in the Visual Studio projects to point to those two newly created apps. Instructions are provided in the [Configure.ps1] which really automates both Step 2 and Step 3.(https://github.com/Azure-Samples/active-directory-dotnet-native-headless/blob/master/AppCreationScripts/Configure.ps1#L2-L29) file
+ - Option 2: you do the same manually. This is what is explained below in this Step 2 / Step 3 sections:
 
 There are two projects in this sample.  Each needs to be separately registered in your Azure AD tenant.
 
@@ -124,12 +124,12 @@ To deploy the TodoListService to Azure Web Sites, you will need to:
 
 NOTE: Remember, the To Do list is stored in memory in this TodoListService sample. Azure Web Sites will spin down your web site if it is inactive, and your To Do list will get emptied. Also, if you increase the instance count of the web site, requests will be distributed among the instances and the To Do will not be the same on each instance.
 
-##About The Code
+## About The Code
 
-The code using ADAL.NET is in the [TodoListClient/MainWindow.xaml.cs](blob/master/MainWindow.xaml.cs) file in the `SignIn` method. See [More information][#More-information] below
+The code using ADAL.NET is in the [TodoListClient/MainWindow.xaml.cs](TodoListClient/MainWindow.xaml.cs) file in the `SignIn` method. See [More information][#More-information] below
 for details on how this work
 
-The code for the Token cache serialization is in [TodoListClient/FileCache.cs](blob/master/TodoListClient/FileCache.cs) 
+The code for the Token cache serialization is in [TodoListClient/FileCache.cs](TodoListClient/FileCache.cs) 
 
 ## How To Recreate This Sample
 
