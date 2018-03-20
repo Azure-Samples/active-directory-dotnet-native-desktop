@@ -2,11 +2,23 @@
 services: active-directory
 platforms: dotnet
 author: jmprieur
+level: 200
+client: .NET Framework 4.5 Console 
+service: ASP.NET Web API
+endpoint: AAD V1
 ---
+# Integrating Azure AD into a Windows desktop application using interactive authentication
+## About this sample
+### Scenario
+This sample demonstrates a .Net WPF application calling a web API that is secured using Azure AD. 
+1. The .Net TodoListClient WPF application uses the Active Directory Authentication Library (ADAL) to obtain a JWT access token from Azure Active Directory (Azure AD) through the OAuth 2.0 protocol:
+2. The access token is used as a bearer token to authenticate the user when calling the /todolist endpoint of the TodoListService web API.
 
-# Integrating Azure AD into a Windows desktop application
+![Topology](./ReadmeFiles/topology.png)
 
-This sample demonstrates a .Net WPF application calling a web API that is secured using Azure AD. The .Net application uses the Active Directory Authentication Library (ADAL) to obtain a JWT access token through the OAuth 2.0 protocol. The access token is sent to the web API to authenticate the user.
+Once you have started the TodolistService, you can run the TodoListClient WPF application, click on *sign-in* and then enter items in a todo list. When you close the application and re-open it, the list is displayed as long as the service is still running, and tis until you click on *clear cache*. At this point you will need to sign-in again (and can use another identity)
+
+![TodoListClient](./ReadmeFiles/TodolistClient.png)
 
 For more information about how the protocols work in this scenario and other scenarios, see [Authentication Scenarios for Azure AD](http://go.microsoft.com/fwlink/?LinkId=394414).
 
@@ -15,10 +27,10 @@ For more information about how the protocols work in this scenario and other sce
 ## How To Run This Sample
 
 To run this sample you will need:
-- Visual Studio 2013
+- [Visual Studio 2017](https://aka.ms/vsdownload)
 - An Internet connection
 - An Azure Active Directory (Azure AD) tenant. For more information on how to get an Azure AD tenant, please see [How to get an Azure AD tenant](https://azure.microsoft.com/en-us/documentation/articles/active-directory-howto-tenant/) 
-- A user account in your Azure AD tenant. This sample will not work with a Microsoft account, so if you signed in to the Azure portal with a Microsoft account and have never created a user account in your directory before, you need to do that now.
+- A user account in your Azure AD tenant. This sample will not work with a Microsoft account, so if you signed in to the Azure portal with a Microsoft account and have never created a user account in your directory before, you need to do that now. This sample will not work with a Microsoft account (formerly Windows Live account).
 
 ### Step 1:  Clone or download this repository
 
@@ -27,6 +39,10 @@ From your shell or command line:
 `git clone https://github.com/Azure-Samples/active-directory-dotnet-native-client.git`
 
 ### Step 2:  Register the sample with your Azure Active Directory tenant
+
+There are two options:
+ - Option 1: you run the `AppCreationScripts\Configure.ps1` PowerShell script which creates two applications in the Azure Active Directory, (one for the client and one for the service), and then updates the configuration files in the Visual Studio projects to point to those two newly created apps. Instructions are provided in the [Configure.ps1] which really automates both Step 2 and Step 3.(https://github.com/Azure-Samples/active-directory-dotnet-native-headless/blob/master/AppCreationScripts/Configure.ps1#L2-L29) file
+ - Option 2: you do the same manually. This is what is explained below in this Step 2 / Step 3 sections:
 
 There are two projects in this sample.  Each needs to be separately registered in your Azure AD tenant.
 
@@ -70,53 +86,18 @@ There are two projects in this sample.  Each needs to be separately registered i
 5. Find the app key `todo:TodoListResourceId` and replace the value with the App ID URI of the TodoListService, for example `https://<your_tenant_name>/TodoListService`
 6. Find the app key `todo:TodoListBaseAddress` and replace the value with the base address of the TodoListService project.
 
-### Step 4:  Trust the IIS Express SSL certificate
-
-Since the web API is SSL protected, the client of the API (the web app) will refuse the SSL connection to the web API unless it trusts the API's SSL certificate.  Use the following steps in Windows Powershell to trust the IIS Express SSL certificate.  You only need to do this once.  If you fail to do this step, calls to the TodoListService will always throw an unhandled exception where the inner exception message is:
-
-"The underlying connection was closed: Could not establish trust relationship for the SSL/TLS secure channel."
-
-To configure your computer to trust the IIS Express SSL certificate, begin by opening a Windows Powershell command window as Administrator.
-
-Query your personal certificate store to find the thumbprint of the certificate for `CN=localhost`:
-
-```
-PS C:\windows\system32> dir Cert:\LocalMachine\My
-
-
-    Directory: Microsoft.PowerShell.Security\Certificate::LocalMachine\My
-
-
-Thumbprint                                Subject
-----------                                -------
-C24798908DA71693C1053F42A462327543B38042  CN=localhost
-```
-
-Next, add the certificate to the Trusted Root store:
-
-```
-PS C:\windows\system32> $cert = (get-item cert:\LocalMachine\My\C24798908DA71693C1053F42A462327543B38042)
-PS C:\windows\system32> $store = (get-item cert:\Localmachine\Root)
-PS C:\windows\system32> $store.Open("ReadWrite")
-PS C:\windows\system32> $store.Add($cert)
-PS C:\windows\system32> $store.Close()
-```
-
-**NOTE:** If you receive an "Access is denied" error on the `$store.Open("ReadWrite")` cmdlet, you may need to run your PowerShell session under "Run as Administrator". 
-
-You can verify the certificate is in the Trusted Root store by running this command:
-
-`PS C:\windows\system32> dir Cert:\LocalMachine\Root`
-
-### Step 5:  Run the sample
+### Step 4:  Run the sample
 
 Clean the solution, rebuild the solution, and run it.  You might want to go into the solution properties and set both projects as startup projects, with the service project starting first.
 
-Explore the sample by signing in, adding items to the To Do list, removing the user account, and starting again.  Notice that if you stop the application without removing the user account, the next time you run the application you won't be prompted to sign-in again - that is the sample implements a persistent cache for ADAL, and remembers the tokens from the previous run.
+Explore the sample by signing in, adding items to the To Do list, removing the user account (by clicking on "Clear Cache"), and starting again.  Notice that if you stop the application without removing the user account, the next time you run the application you won't be prompted to sign-in again - that is the sample implements a persistent cache for ADAL, and remembers the tokens from the previous run.
 
 ## How To Deploy This Sample to Azure
 
-To deploy the TodoListService to Azure Web Sites, you will create a web site, publish the TodoListService to the web site, and update the TodoListClient to call the web site instead of IIS Express.
+To deploy the TodoListService to Azure Web Sites, you will need to:
+- create an Azure Web Site
+- publish the TodoListService to the web site, and
+- update the TodoListClient to call the web site instead of IIS Express.
 
 ### Create and Publish the TodoListService to an Azure Web Site
 
@@ -143,17 +124,20 @@ To deploy the TodoListService to Azure Web Sites, you will create a web site, pu
 
 NOTE: Remember, the To Do list is stored in memory in this TodoListService sample. Azure Web Sites will spin down your web site if it is inactive, and your To Do list will get emptied. Also, if you increase the instance count of the web site, requests will be distributed among the instances and the To Do will not be the same on each instance.
 
-##About The Code
+## About The Code
 
-Coming soon.
+The code using ADAL.NET is in the [TodoListClient/MainWindow.xaml.cs](TodoListClient/MainWindow.xaml.cs) file in the `SignIn` method. See [More information][#More-information] below
+for details on how this work
+
+The code for the Token cache serialization is in [TodoListClient/FileCache.cs](TodoListClient/FileCache.cs) 
 
 ## How To Recreate This Sample
 
-First, in Visual Studio 2013 create an empty solution to host the  projects.  Then, follow these steps to create each project.
+First, in Visual Studio 2017 create an empty solution to host the  projects.  Then, follow these steps to create each project.
 
 ### Creating the TodoListService Project
 
-1. In the solution, create a new ASP.Net MVC web API project called TodoListService and while creating the project, click the Change Authentication button, select Organizational Accounts, Cloud - Single Organization, enter the name of your Azure AD tenant, and set the Access Level to Single Sign On.  You will be prompted to sign-in to your Azure AD tenant.  NOTE:  You must sign-in with a user that is in the tenant; you cannot, during this step, sign-in with a Microsoft account.
+1. In the solution, create a new ASP.Net MVC web API project called `TodoListService` and while creating the project, click the Change **Authentication** button, select **Organizational Accounts, Cloud - Single Organization**, enter the name of your Azure AD tenant, and set the Access Level to **Single Sign On**.  You will be prompted to sign-in to your Azure AD tenant.  NOTE:  You must sign-in with a user that is in the tenant; you cannot, during this step, sign-in with a Microsoft account.
 2. In the `Models` folder add a new class called `TodoItem.cs`.  Copy the implementation of TodoItem from this sample into the class.
 3. Add a new, empty, Web API 2 controller called `TodoListController`.
 4. Copy the implementation of the TodoListController from this sample into the controller.  Don't forget to add the `[Authorize]` attribute to the class.
@@ -162,7 +146,7 @@ First, in Visual Studio 2013 create an empty solution to host the  projects.  Th
 ### Creating the TodoListClient Project
 
 1. In the solution, create a new Windows --> WPF Application called TodoListClient.
-2. Add the (stable release) Active Directory Authentication Library (ADAL) NuGet, Microsoft.IdentityModel.Clients.ActiveDirectory to the project.
+2. Add the (stable release) Active Directory Authentication Library (ADAL) NuGet, `Microsoft.IdentityModel.Clients.ActiveDirectory` to the project.
 3. Add  assembly references to `System.Net.Http`, `System.Web.Extensions`, `System.Security`, and `System.Configuration`.
 4. Add a new class to the project called `TodoItem.cs`.  Copy the code from the sample project file of same name into this class, completely replacing the code in the file in the new project.
 5. Add a new class to the project called `FileCache.cs`.  Copy the code from the sample project file of same name into this class, completely replacing the code in the file in the new project.
@@ -171,3 +155,10 @@ First, in Visual Studio 2013 create an empty solution to host the  projects.  Th
 8. In `app.config` create keys for `ida:AADInstance`, `ida:Tenant`, `ida:ClientId`, `ida:RedirectUri`, `todo:TodoListResourceId`, and `todo:TodoListBaseAddress` and set them accordingly.  For the public Azure cloud, the value of `ida:AADInstance` is `https://login.microsoftonline.com/{0}`.
 
 Finally, in the properties of the solution itself, set both projects as startup projects.
+
+## More information
+For more information see ADAL.NET's conceptual documentation:
+- [Recommanded pattern to acquire a token](https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/AcquireTokenSilentAsync-using-a-cached-token#recommended-pattern-to-acquire-a-token)
+- [Acquiring tokens ineractively in public client applications](https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Acquiring-tokens-interactively---Public-client-application-flows) 
+- [Customizing Token cache serialization](https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Token-cache-serialization)
+ 
