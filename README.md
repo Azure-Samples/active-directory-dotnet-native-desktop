@@ -17,7 +17,7 @@ This sample demonstrates a .Net WPF application calling a web API that is secure
 
 ![Topology](./ReadmeFiles/topology.png)
 
-Once you have started the TodolistService, you can run the TodoListClient WPF application, click on *sign-in* and then enter items in a todo list. When you close the application and re-open it, the list is displayed as long as the service is still running, and tis until you click on *clear cache*. At this point you will need to sign-in again (and can use another identity)
+Once you have started the TodolistService, you can run the TodoListClient WPF application, click on the *sign-in* button and then enter items in a todo list. When you close the application and re-open it, the list is still displayed, as long as the service is running (it maintains the todo list in memory), and this until you click on the *Clear Cache* button. At this point you will need to sign-in again (and can use another identity). You will manipulate the todo list of the identity you signed-in with.
 
 ![TodoListClient](./ReadmeFiles/TodolistClient.png)
 
