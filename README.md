@@ -7,6 +7,7 @@ client: .NET Framework 4.5 Console
 service: ASP.NET Web API
 endpoint: AAD V1
 ---
+![Build badge](https://identitydivision.visualstudio.com/_apis/public/build/definitions/a7934fdd-dcde-4492-a406-7fad6ac00e17/49/badge)
 # Integrating Azure AD into a Windows desktop application using interactive authentication
 ## About this sample
 ### Scenario
