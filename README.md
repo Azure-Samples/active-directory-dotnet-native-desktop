@@ -4,7 +4,7 @@ platforms: dotnet
 author: jmprieur
 level: 200
 client: .NET Framework 4.5 Console 
-service: .NET Framework 4.5 Web API
+service: ASP.NET Web API
 endpoint: AAD V1
 ---
 # Integrating Azure AD into a Windows desktop application using interactive authentication
