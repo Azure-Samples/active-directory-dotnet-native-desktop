@@ -50,7 +50,7 @@ From your shell or command line:
 There are two projects in this sample. Each needs to be separately registered in your Azure AD tenant. To register these projects you can:
 
 - either follow the steps in the paragraphs below (Step 2 and Step 3)
-- or you can use PowerShell scripts which automatically create for you the Azure AD applications and related objects (passwords, permissions, dependencies) and modify the projects' configuration files. If you want to do use this automation, read the instructions in [App Creation Scripts](./AppCreationScripts/AppCreationScripts.md)
+- or use PowerShell scripts which **automatically** create for you the Azure AD applications and related objects (passwords, permissions, dependencies) and modify the projects' configuration files. If you want to do use this automation, read the instructions in [App Creation Scripts](./AppCreationScripts/AppCreationScripts.md)
 
 #### Register the TodoListService web API
 
