@@ -42,6 +42,7 @@ From your shell or command line:
 
 There are two options:
  - Option 1: you run the `AppCreationScripts\Configure.ps1` PowerShell script which creates two applications in the Azure Active Directory, (one for the client and one for the service), and then updates the configuration files in the Visual Studio projects to point to those two newly created apps. Instructions are provided in the [Configure.ps1] which really automates both Step 2 and Step 3.(https://github.com/Azure-Samples/active-directory-dotnet-native-headless/blob/master/AppCreationScripts/Configure.ps1#L2-L29) file
+ - You can run the run the `AppCreationScripts\Configure.ps1` PowerShell script to cleanup the application registration created in your Azure AD tenant prior by `AppCreationScripts\Configure.ps1`. 
  - Option 2: you do the same manually. This is what is explained below in this Step 2 / Step 3 sections:
 
 There are two projects in this sample.  Each needs to be separately registered in your Azure AD tenant.
