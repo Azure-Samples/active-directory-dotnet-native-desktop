@@ -133,7 +133,7 @@ NOTE: Remember, the To Do list is stored in memory in this TodoListService sampl
 
 ## About The Code
 
-The code using ADAL.NET is in the [TodoListClient/MainWindow.xaml.cs](TodoListClient/MainWindow.xaml.cs) file in the `SignIn` method. See [More information][#more-information] below
+The code using ADAL.NET is in the [TodoListClient/MainWindow.xaml.cs](TodoListClient/MainWindow.xaml.cs) file in the `SignIn` method. See [More information](#more-information) below
 for details on how this work
 
 The code for the Token cache serialization is in [TodoListClient/FileCache.cs](TodoListClient/FileCache.cs)
