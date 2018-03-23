@@ -22,7 +22,7 @@ This sample demonstrates a .Net WPF application calling a web API that is secure
 
 ![Topology](./ReadmeFiles/topology.png)
 
-Once you have started the TodolistService, you can run the TodoListClient WPF application, click on the *sign-in* button and then enter items in a todo list. When you close the application and re-open it, the list is still displayed, as long as the service is running (it maintains the todo list in memory), and this until you click on the *Clear Cache* button. At this point you will need to sign-in again (and can use another identity). You will manipulate the todo list of the identity you signed-in with.
+Once you have started the TodolistService, you can run the TodoListClient WPF application, click on the *sign-in* button and then enter items in a todo list. When you close the application and re-open it, the list is still displayed, as long as the service is running (it maintains the todo list in memory), or until you click on the *Clear Cache* button. At this point you will need to sign-in again (and can use another identity). You will manipulate the todo list of the identity you signed-in with.
 
 ![TodoListClient](./ReadmeFiles/TodolistClient.png)
 
@@ -96,7 +96,7 @@ There are two projects in this sample. Each needs to be separately registered in
 
 Clean the solution, rebuild the solution, and run it.  You might want to go into the solution properties and set both projects as startup projects, with the service project starting first.
 
-Explore the sample by signing in, adding items to the To Do list, removing the user account (by clicking on "Clear Cache"), and starting again.  Notice that if you stop the application without removing the user account, the next time you run the application you won't be prompted to sign-in again - that is the sample implements a persistent cache for ADAL, and remembers the tokens from the previous run.
+Explore the sample by signing in, adding items to the To Do list, removing the user account (by clicking on "Clear Cache"), and starting again.  Notice that if you stop the application without removing the user account, the next time you run the application you won't be prompted to sign-in again. The sample implements a persistent cache for ADAL, and remembers the tokens from the previous run.
 
 ## How To Deploy This Sample to Azure
 
@@ -133,7 +133,7 @@ NOTE: Remember, the To Do list is stored in memory in this TodoListService sampl
 
 ## About The Code
 
-The code using ADAL.NET is in the [TodoListClient/MainWindow.xaml.cs](TodoListClient/MainWindow.xaml.cs) file in the `SignIn` method. See [More information][#More-information] below
+The code using ADAL.NET is in the [TodoListClient/MainWindow.xaml.cs](TodoListClient/MainWindow.xaml.cs) file in the `SignIn` method. See [More information](#more-information) below
 for details on how this work
 
 The code for the Token cache serialization is in [TodoListClient/FileCache.cs](TodoListClient/FileCache.cs)
@@ -167,6 +167,6 @@ Finally, in the properties of the solution itself, set both projects as startup 
 
 For more information see ADAL.NET's conceptual documentation:
 
-- [Recommanded pattern to acquire a token](https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/AcquireTokenSilentAsync-using-a-cached-token#recommended-pattern-to-acquire-a-token)
-- [Acquiring tokens ineractively in public client applications](https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Acquiring-tokens-interactively---Public-client-application-flows)
+- [Recommended pattern to acquire a token](https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/AcquireTokenSilentAsync-using-a-cached-token#recommended-pattern-to-acquire-a-token)
+- [Acquiring tokens interactively in public client applications](https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Acquiring-tokens-interactively---Public-client-application-flows)
 - [Customizing Token cache serialization](https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Token-cache-serialization)
