@@ -7,9 +7,9 @@ client: .NET Framework 4.5 Console
 service: ASP.NET Web API
 endpoint: AAD V1
 ---
-![Build badge](https://identitydivision.visualstudio.com/_apis/public/build/definitions/a7934fdd-dcde-4492-a406-7fad6ac00e17/49/badge)
-
 # Integrating Azure AD into a Windows desktop application using interactive authentication
+
+![Build badge](https://identitydivision.visualstudio.com/_apis/public/build/definitions/a7934fdd-dcde-4492-a406-7fad6ac00e17/49/badge)
 
 ## About this sample
 
@@ -22,7 +22,7 @@ This sample demonstrates a .Net WPF application calling a web API that is secure
 
 ![Topology](./ReadmeFiles/topology.png)
 
-Once you have started the TodolistService, you can run the TodoListClient WPF application, click on the *sign-in* button and then enter items in a todo list. When you close the application and re-open it, the list is still displayed, as long as the service is running (it maintains the todo list in memory), or until you click on the *Clear Cache* button. At this point you will need to sign-in again (and can use another identity). You will manipulate the todo list of the identity you signed-in with.
+Once you've started the TodolistService, you can run the TodoListClient WPF application, click on the *sign-in* button, and then enter items in a todo list. When you close the application and reopen it, the list is still displayed, as long as the service is running (it maintains the todo list in memory), or until you click on the *Clear Cache* button. At this point, you'll need to sign in again (and can use another identity). You will manipulate the todo list of the identity you signed-in with.
 
 ![TodoListClient](./ReadmeFiles/TodolistClient.png)
 
@@ -32,12 +32,12 @@ For more information about how the protocols work in this scenario and other sce
 
 ## How To Run This Sample
 
-To run this sample you will need:
+To run this sample, you'll need:
 
 - [Visual Studio 2017](https://aka.ms/vsdownload)
 - An Internet connection
-- An Azure Active Directory (Azure AD) tenant. For more information on how to get an Azure AD tenant, please see [How to get an Azure AD tenant](https://azure.microsoft.com/en-us/documentation/articles/active-directory-howto-tenant/)
-- A user account in your Azure AD tenant. This sample will not work with a Microsoft account, so if you signed in to the Azure portal with a Microsoft account and have never created a user account in your directory before, you need to do that now. This sample will not work with a Microsoft account (formerly Windows Live account).
+- An Azure Active Directory (Azure AD) tenant. For more information on how to get an Azure AD tenant, see [How to get an Azure AD tenant](https://azure.microsoft.com/en-us/documentation/articles/active-directory-howto-tenant/)
+- A user account in your Azure AD tenant. This sample will not work with a Microsoft account (formerly Windows Live account. Therefore, if you signed in to the Azure portal with a Microsoft account and have never created a user account in your directory before, you need to do that now.
 
 ### Step 1:  Clone or download this repository
 
@@ -47,19 +47,19 @@ From your shell or command line:
 
 ### Step 2:  Register the sample with your Azure Active Directory tenant
 
-There are two projects in this sample. Each needs to be separately registered in your Azure AD tenant. To register these projects you can:
+There are two projects in this sample. Each needs to be separately registered in your Azure AD tenant. To register these projects, you can:
 
 - either follow the steps in the paragraphs below (Step 2 and Step 3)
-- or use PowerShell scripts which **automatically** create for you the Azure AD applications and related objects (passwords, permissions, dependencies) and modify the projects' configuration files. If you want to do use this automation, read the instructions in [App Creation Scripts](./AppCreationScripts/AppCreationScripts.md)
+- or use PowerShell scripts that **automatically** create for you the Azure AD applications and related objects (passwords, permissions, dependencies) and modify the projects' configuration files. If you want to do use this automation, read the instructions in [App Creation Scripts](./AppCreationScripts/AppCreationScripts.md)
 
 #### Register the TodoListService web API
 
 1. Sign in to the [Azure portal](https://portal.azure.com).
 2. On the top bar, click on your account and under the **Directory** list, choose the Active Directory tenant where you wish to register your application.
-3. Click on **More Services** in the left hand nav, and choose **Azure Active Directory**.
+3. Click on **More Services** in the left-hand nav, and choose **Azure Active Directory**.
 4. Click on **App registrations** and choose **Add**.
 5. Enter a friendly name for the application, for example 'TodoListService' and select 'Web Application and/or Web API' as the Application Type. For the sign-on URL, enter the base URL for the sample, which is by default `https://localhost:44321`. Click on **Create** to create the application.
-6. While still in the Azure portal, choose your application, click on **Settings** and choose **Properties**.
+6. While still in the Azure portal, choose your application, click on **Settings**, and choose **Properties**.
 7. Find the Application ID value and copy it to the clipboard.
 8. For the App ID URI, enter https://\<your_tenant_name\>/TodoListService, replacing \<your_tenant_name\> with the name of your Azure AD tenant.
 
@@ -67,10 +67,10 @@ There are two projects in this sample. Each needs to be separately registered in
 
 1. Sign in to the [Azure portal](https://portal.azure.com).
 2. On the top bar, click on your account and under the **Directory** list, choose the Active Directory tenant where you wish to register your application.
-3. Click on **More Services** in the left hand nav, and choose **Azure Active Directory**.
+3. Click on **More Services** in the left-hand nav, and choose **Azure Active Directory**.
 4. Click on **App registrations** and choose **Add**.
 5. Enter a friendly name for the application, for example 'TodoListClient-DotNet' and select 'Native' as the Application Type. For the redirect URI, enter `https://TodoListClient`. Click on **Create** to create the application.
-6. While still in the Azure portal, choose your application, click on **Settings** and choose **Properties**.
+6. While still in the Azure portal, choose your application, click on Settings, and choose **Properties**.
 7. Find the Application ID value and copy it to the clipboard.
 8. Configure Permissions for your application - in the Settings menu, choose the 'Required permissions' section, click on **Add**, then **Select an API**, and type 'TodoListService' in the textbox. Then, click on  **Select Permissions** and select 'Access TodoListService'.
 
@@ -96,7 +96,7 @@ There are two projects in this sample. Each needs to be separately registered in
 
 Clean the solution, rebuild the solution, and run it.  You might want to go into the solution properties and set both projects as startup projects, with the service project starting first.
 
-Explore the sample by signing in, adding items to the To Do list, removing the user account (by clicking on "Clear Cache"), and starting again.  Notice that if you stop the application without removing the user account, the next time you run the application you won't be prompted to sign-in again. The sample implements a persistent cache for ADAL, and remembers the tokens from the previous run.
+Explore the sample by signing in, adding items to the To Do list, removing the user account (by clicking on "Clear Cache"), and starting again.  Notice that if you stop the application without removing the user account, the next time you run the application you won't be prompted to sign in again. The sample implements a persistent cache for ADAL, and remembers the tokens from the previous run.
 
 ## How To Deploy This Sample to Azure
 
@@ -109,7 +109,7 @@ To deploy the TodoListService to Azure Web Sites, you will need to:
 ### Create and Publish the TodoListService to an Azure Web Site
 
 1. Sign in to the [Azure portal](https://portal.azure.com).
-2. Click New in the top left hand corner, select Web + Mobile --> Web App, select the hosting plan and region, and give your web site a name, e.g. todolistservice-contoso.azurewebsites.net.  Click Create Web Site.
+2. Click New in the top left-hand corner, select Web + Mobile --> Web App, select the hosting plan and region, and give your web site a name, for example, todolistservice-contoso.azurewebsites.net.  Click Create Web Site.
 3. Once the web site is created, click on it to manage it.  For this set of steps, download the publish profile and save it.  Other deployment mechanisms, such as from source control, can also be used.
 4. Switch to Visual Studio and go to the TodoListService project.  Right click on the project in the Solution Explorer and select Publish.  Click Import, and import the publish profile that you just downloaded.
 5. On the Connection tab, update the Destination URL so that it is https, for example https://todolistservice-skwantoso.azurewebsites.net.  Click Next.
@@ -121,13 +121,13 @@ To deploy the TodoListService to Azure Web Sites, you will need to:
 1. Navigate to the [Azure portal](https://portal.azure.com).
 2. On the top bar, click on your account and under the **Directory** list, choose the Active Directory tenant containing the TodoListService application.
 3. On the applications tab, select the TodoListService application.
-4. From the Settings -> Properties and Settings -> Reply URLs menus, update the Sign-On URL and Reply URL fields to the address of your service, for example https://todolistservice-skwantoso.azurewebsites.net.  Save the configuration.
+4. From the Settings -> Properties and Settings -> Reply URLs menus, update the Sign-On URL, and Reply URL fields to the address of your service, for example https://todolistservice-skwantoso.azurewebsites.net.  Save the configuration.
 
 ### Update the TodoListClient to call the TodoListService Running in Azure Web Sites
 
 1. In Visual Studio, go to the TodoListClient project.
-2. Open `app.config`.  Only one change is needed - update the `todo:TodoListBaseAddress` key value to be the address of the website you published, e.g. https://todolistservice-skwantoso.azurewebsites.net.
-3. Run the client!  If you are trying multiple different client types (e.g. .Net, Windows Store, Android, iOS) you can have them all call this one published web API.
+2. Open `app.config`.  Only one change is needed - update the `todo:TodoListBaseAddress` key value to be the address of the website you published, for example, https://todolistservice-skwantoso.azurewebsites.net.
+3. Run the client!  If you are trying multiple different client types (for example, .Net, Windows Store, Android, iOS) you can have them all call this one published web API.
 
 NOTE: Remember, the To Do list is stored in memory in this TodoListService sample. Azure Web Sites will spin down your web site if it is inactive, and your To Do list will get emptied. Also, if you increase the instance count of the web site, requests will be distributed among the instances and the To Do will not be the same on each instance.
 
@@ -144,8 +144,8 @@ First, in Visual Studio 2017 create an empty solution to host the  projects.  Th
 
 ### Creating the TodoListService Project
 
-1. In the solution, create a new ASP.Net MVC web API project called `TodoListService` and while creating the project, click the Change **Authentication** button, select **Organizational Accounts, Cloud - Single Organization**, enter the name of your Azure AD tenant, and set the Access Level to **Single Sign On**.  You will be prompted to sign-in to your Azure AD tenant.  NOTE:  You must sign-in with a user that is in the tenant; you cannot, during this step, sign-in with a Microsoft account.
-2. In the `Models` folder add a new class called `TodoItem.cs`.  Copy the implementation of TodoItem from this sample into the class.
+1. In the solution, create a new ASP.Net MVC web API project called `TodoListService` and while creating the project, click the Change **Authentication** button, select **Organizational Accounts, Cloud - Single Organization**, enter the name of your Azure AD tenant, and set the Access Level to **Single Sign On**.  You will be prompted to sign in to your Azure AD tenant.  NOTE:  You must sign in with a user that is in the tenant; you cannot, during this step, sign in with a Microsoft account.
+2. In the  folder, add a new class called `TodoItem.cs`.  Copy the implementation of TodoItem from this sample into the class.
 3. Add a new, empty, Web API 2 controller called `TodoListController`.
 4. Copy the implementation of the TodoListController from this sample into the controller.  Don't forget to add the `[Authorize]` attribute to the class.
 5. In `TodoListController` resolving missing references by adding `using` statements for `System.Collections.Concurrent`, `TodoListService.Models`, `System.Security.Claims`.
@@ -155,17 +155,17 @@ First, in Visual Studio 2017 create an empty solution to host the  projects.  Th
 1. In the solution, create a new Windows --> WPF Application called TodoListClient.
 2. Add the (stable release) Active Directory Authentication Library (ADAL) NuGet, `Microsoft.IdentityModel.Clients.ActiveDirectory` to the project.
 3. Add  assembly references to `System.Net.Http`, `System.Web.Extensions`, `System.Security`, and `System.Configuration`.
-4. Add a new class to the project called `TodoItem.cs`.  Copy the code from the sample project file of same name into this class, completely replacing the code in the file in the new project.
-5. Add a new class to the project called `FileCache.cs`.  Copy the code from the sample project file of same name into this class, completely replacing the code in the file in the new project.
-6. Copy the markup from `MainWindow.xaml' in the sample project into the file of same name in the new project, completely replacing the markup in the file in the new project.
-7. Copy the code from `MainWindow.xaml.cs` in the sample project into the file of same name in the new project, completely replacing the code in the file in the new project.
-8. In `app.config` create keys for `ida:AADInstance`, `ida:Tenant`, `ida:ClientId`, `ida:RedirectUri`, `todo:TodoListResourceId`, and `todo:TodoListBaseAddress` and set them accordingly.  For the public Azure cloud, the value of `ida:AADInstance` is `https://login.microsoftonline.com/{0}`.
+4. Add a new class to the project called `TodoItem.cs`.  Copy the code from the sample project file of the same name into this class, completely replacing the code in the file in the new project.
+5. Add a new class to the project called `FileCache.cs`.  Copy the code from the sample project file of the same name into this class, completely replacing the code in the file in the new project.
+6. Copy the markup from `MainWindow.xaml' in the sample project into the file of the same name in the new project, completely replacing the markup in the file in the new project.
+7. Copy the code from `MainWindow.xaml.cs` in the sample project into the file of the same name in the new project, completely replacing the code in the file in the new project.
+8. In `app.config` create keys for `ida:AADInstance`, `ida:Tenant`, `ida:ClientId`, `ida:RedirectUri`, `todo:TodoListResourceId`, and `todo:TodoListBaseAddress` and set them accordingly.  For the global Azure cloud, the value of `ida:AADInstance` is `https://login.microsoftonline.com/{0}`.
 
 Finally, in the properties of the solution itself, set both projects as startup projects.
 
 ## More information
 
-For more information see ADAL.NET's conceptual documentation:
+For more information, see ADAL.NET's conceptual documentation:
 
 - [Recommended pattern to acquire a token](https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/AcquireTokenSilentAsync-using-a-cached-token#recommended-pattern-to-acquire-a-token)
 - [Acquiring tokens interactively in public client applications](https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Acquiring-tokens-interactively---Public-client-application-flows)
