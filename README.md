@@ -131,7 +131,7 @@ To deploy the TodoListService to Azure Web Sites, you will need to:
 
 NOTE: Remember, the To Do list is stored in memory in this TodoListService sample. Azure Web Sites will spin down your web site if it is inactive, and your To Do list will get emptied. Also, if you increase the instance count of the web site, requests will be distributed among the instances and the To Do will not be the same on each instance.
 
-## About The Code
+## About the code
 
 ### On the client slide
 
