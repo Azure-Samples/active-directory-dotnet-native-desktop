@@ -133,10 +133,69 @@ NOTE: Remember, the To Do list is stored in memory in this TodoListService sampl
 
 ## About The Code
 
-The code using ADAL.NET is in the [TodoListClient/MainWindow.xaml.cs](TodoListClient/MainWindow.xaml.cs) file in the `SignIn` method. See [More information](#more-information) below
-for details on how this work
+### On the client slide
 
-The code for the Token cache serialization is in [TodoListClient/FileCache.cs](TodoListClient/FileCache.cs)
+The code using ADAL.NET is in the [TodoListClient/MainWindow.xaml.cs](TodoListClient/MainWindow.xaml.cs) file in the `SignIn` method. See [More information](#more-information) below
+for details on how this work.
+
+Also, to avoid you re sign in each time your run the client application, the code provides a Token cache serialization located in [TodoListClient/FileCache.cs](TodoListClient/FileCache.cs)
+
+### On the service side
+
+The `Startup.cs` file contains a partial implementation of the `Startup` class, which Configration() method calls ConfigureAuth()
+
+```C#
+public partial class Startup
+{
+    public void Configuration(IAppBuilder app)
+    {
+        ConfigureAuth(app);
+    }
+}
+```
+
+In the `App_Start\Startup.Auth.cs` file the `ConfigureAuth(…)` method declare the uses of Windows Azure Active Directory bearer authentication and sets the application coordinates to communicate with Azure AD as  `WindowsAzureActiveDirectoryBearerAuthenticationOptions`.
+
+```C#
+public void ConfigureAuth(IAppBuilder app)
+{
+    app.UseWindowsAzureActiveDirectoryBearerAuthentication(
+        new WindowsAzureActiveDirectoryBearerAuthenticationOptions
+        {
+            Tenant = ConfigurationManager.AppSettings["ida:Tenant"],
+            TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidAudience = ConfigurationManager.AppSettings["ida:Audience"]
+            }
+        });
+}
+```
+
+- The `[Authorize]` attributes on the controller  protect the controllers and actions with JWT bearer authentication.  See for instance the `Controllers\TodoListController.cs` class with an authorize attribute.  This will force the user to sign in before accessing that page.
+
+```C#
+[Authorize]
+public class TodoListController : ApiController
+{
+```
+
+- When an authorized caller successfully invokes one of the `TodoListController` APIs, the action might need access to information about the caller.  OWIN provides access to the claims inside the bearer token via the `ClaimsPrincpal` object.
+- A common requirement for web APIs is to validate the "scopes" present in the token - this ensures that the end user has consented to the permissions required to access the Todo List Service:
+
+```C#
+public IEnumerable<TodoItem> Get()
+{
+    // user_impersonation is the default permission exposed by applications in AAD
+    if (ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/scope").Value != "user_impersonation")
+    {
+        throw new HttpResponseException(new HttpResponseMessage {
+          StatusCode = HttpStatusCode.Unauthorized,
+          ReasonPhrase = "The Scope claim does not contain 'user_impersonation' or scope claim not found"
+        });
+    }
+    ...
+}
+```
 
 ## How To Recreate This Sample
 
