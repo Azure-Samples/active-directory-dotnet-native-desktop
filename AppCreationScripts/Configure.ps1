@@ -10,7 +10,7 @@
  There are three ways to run this script
  Option1 (interactive)
  ---------------------
- Just run . .\Configue.ps1, and you will be prompted to sign-in (email address, password, and if needed MFA). 
+ Just run . .\Configure.ps1, and you will be prompted to sign-in (email address, password, and if needed MFA). 
  The script will be run as the signed-in user and will use the tenant in which the user is defined.
 
  Option 2 (Interactive, but create apps in a specified tenant)
@@ -18,7 +18,7 @@
  If you want to create the apps in a specific tenant, before you run this script
  - In the Azure portal (https://portal.azure.com), choose your active directory tenant, then go to the Properties of the tenant and copy
    the DirectoryID. This is what we'll use in this script for the tenant ID
- - run . .\Configue.ps1 -TenantId [place here the GUID representing the tenant ID]
+ - run . .\Configure.ps1 -TenantId [place here the GUID representing the tenant ID]
 
  Option 2 (non-interactive)
  ---------------------------
