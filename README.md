@@ -3,7 +3,7 @@ services: active-directory
 platforms: dotnet
 author: jmprieur
 level: 200
-client: .NET Framework 4.5 Console 
+client: .NET Desktop (Console)
 service: ASP.NET Web API
 endpoint: AAD V1
 ---
@@ -30,20 +30,22 @@ For more information about how the protocols work in this scenario and other sce
 
 > Looking for previous versions of this code sample? Check out the tags on the [releases](../../releases) GitHub page.
 
-## How To Run This Sample
+## How to run this sample
 
 To run this sample, you'll need:
 
 - [Visual Studio 2017](https://aka.ms/vsdownload)
 - An Internet connection
 - An Azure Active Directory (Azure AD) tenant. For more information on how to get an Azure AD tenant, see [How to get an Azure AD tenant](https://azure.microsoft.com/en-us/documentation/articles/active-directory-howto-tenant/)
-- A user account in your Azure AD tenant. This sample will not work with a Microsoft account (formerly Windows Live account. Therefore, if you signed in to the Azure portal with a Microsoft account and have never created a user account in your directory before, you need to do that now.
+- A user account in your Azure AD tenant. This sample will not work with a Microsoft account (formerly Windows Live account). Therefore, if you signed in to the [Azure portal](https://portal.azure.com) with a Microsoft account and have never created a user account in your directory before, you need to do that now.
 
 ### Step 1:  Clone or download this repository
 
 From your shell or command line:
 
 `git clone https://github.com/Azure-Samples/active-directory-dotnet-native-client.git`
+
+> Given that the name of the sample is pretty long, and so are the name of the referenced NuGet pacakges, you might want to clone it in a folder close to the root of your hard drive, to avoid file size limitations on Windows.
 
 ### Step 2:  Register the sample with your Azure Active Directory tenant
 
@@ -63,73 +65,79 @@ There are two projects in this sample. Each needs to be separately registered in
 7. Find the Application ID value and copy it to the clipboard.
 8. For the App ID URI, enter https://\<your_tenant_name\>/TodoListService, replacing \<your_tenant_name\> with the name of your Azure AD tenant.
 
-#### Register the TodoListClient app
+#### Register the client app (TodoListClient-NativeDotNet)
 
-1. Sign in to the [Azure portal](https://portal.azure.com).
-2. On the top bar, click on your account and under the **Directory** list, choose the Active Directory tenant where you wish to register your application.
-3. Click on **More Services** in the left-hand nav, and choose **Azure Active Directory**.
-4. Click on **App registrations** and choose **Add**.
-5. Enter a friendly name for the application, for example 'TodoListClient-DotNet' and select 'Native' as the Application Type. For the redirect URI, enter `https://TodoListClient`. Click on **Create** to create the application.
-6. While still in the Azure portal, choose your application, click on Settings, and choose **Properties**.
-7. Find the Application ID value and copy it to the clipboard.
-8. Configure Permissions for your application - in the Settings menu, choose the 'Required permissions' section, click on **Add**, then **Select an API**, and type 'TodoListService' in the textbox. Then, click on  **Select Permissions** and select 'Access TodoListService'.
+1. In the  **Azure Active Directory** pane, click on **App registrations** and choose **New application registration**.
+1. Enter a friendly name for the application, for example 'TodoListClient-NativeDotNet' and select 'Native' as the *Application Type*.
+1. For the *Redirect URI*, enter `https://<your_tenant_name>/TodoListClient-NativeDotNet`, replacing `<your_tenant_name>` with the name of your Azure AD tenant.
+1. Click on **Create** to create the application.
+1. In the succeeding page, Find the *Application ID* value and copy it to the clipboard. You'll need it to configure the Visual Studio configuration file for this project.
+1. Then click on **Settings**, and choose **Properties**.
+1. For the App ID URI, replace the guid in the generated URI 'https://\<your_tenant_name\>/\<guid\>', with the name of your service, for example, 'https://\<your_tenant_name\>/TodoListClient-NativeDotNet' (replacing `<your_tenant_name>` with the name of your Azure AD tenant)
+1. Configure Permissions for your application. To that extent, in the Settings menu, choose the 'Required permissions' section and then,
+   click on **Add**, then **Select an API**, and type `TodoListService-NativeDotNet` in the textbox. Then, click on  **Select Permissions** and select **Access 'TodoListService-NativeDotNet'**.
 
 ### Step 3:  Configure the sample to use your Azure AD tenant
 
-#### Configure the TodoListService project
+In the steps below, ClientID is the same as Application ID or AppId.
 
-1. Open the solution in Visual Studio.
-2. Open the `web.config` file.
-3. Find the app key `ida:Tenant` and replace the value with your AAD tenant name.
-4. Find the app key `ida:Audience` and replace the value with the App ID URI you registered earlier, for example `https://<your_tenant_name>/TodoListService`.
+Open the solution in Visual Studio to configure the projects
 
-#### Configure the TodoListClient project
+### Configure the service project
 
-1. Open `app.config`.
-2. Find the app key `ida:Tenant` and replace the value with your AAD tenant name.
-3. Find the app key `ida:ClientId` and replace the value with the Client ID for the TodoListClient from the Azure portal.
-4. Find the app key `ida:RedirectUri` and replace the value with the Redirect URI for the TodoListClient from the Azure portal, for example `http://TodoListClient`.
-5. Find the app key `todo:TodoListResourceId` and replace the value with the App ID URI of the TodoListService, for example `https://<your_tenant_name>/TodoListService`
-6. Find the app key `todo:TodoListBaseAddress` and replace the value with the base address of the TodoListService project.
+1. Open the `TodoListService\Web.Config` file
+1. Find the app key `ida:Tenant` and replace the existing value with your AAD tenant name.
+1. Find the app key `ida:Audience` and replace the existing value with the App ID URI you registered earlier for the TodoListService-NativeDotNet app. For instance use `https://<your_tenant_name>/TodoListService-NativeDotNet`, where `<your_tenant_name>` is the name of your Azure AD tenant.
 
-### Step 4:  Run the sample
+### Configure the client project
+
+1. Open the `TodoListClient\App.Config` file
+1. Find the app key `ida:Tenant` and replace the existing value with your AAD tenant name.
+1. Find the app key `ida:ClientId` and replace the existing value with the application ID (clientId) of the `TodoListClient-NativeDotNet` application copied from the Azure portal.
+1. Find the app key `ida:RedirectUri` and replace the existing value with the Redirect URI for TodoListClient-NativeDotNet app. For instance use `https://<your_tenant_name>/TodoListClient-NativeDotNet`, where `<your_tenant_name>` is the name of your Azure AD tenant.
+1. Find the app key `todo:TodoListResourceId` and replace the existing value with the App ID URI you registered earlier for the TodoListService-NativeDotNet app. For instance use `https://<your_tenant_name>/TodoListService-NativeDotNet`, where `<your_tenant_name>` is the name of your Azure AD tenant.
+1. Find the app key `todo:TodoListBaseAddress` and replace the existing value with the base address of the TodoListService-NativeDotNet project (by default `https://localhost:44321/`).
+
+### Step 4: Run the sample
 
 Clean the solution, rebuild the solution, and run it.  You might want to go into the solution properties and set both projects as startup projects, with the service project starting first.
 
 Explore the sample by signing in, adding items to the To Do list, removing the user account (by clicking on "Clear Cache"), and starting again.  Notice that if you stop the application without removing the user account, the next time you run the application you won't be prompted to sign in again. The sample implements a persistent cache for ADAL, and remembers the tokens from the previous run.
 
-## How To Deploy This Sample to Azure
+## How to deploy this sample to Azure
 
-To deploy the TodoListService to Azure Web Sites, you will need to:
+This project has one WebApp / Web API projects. To deploy them to Azure Web Sites, you'll need, for each one, to:
 
 - create an Azure Web Site
-- publish the TodoListService to the web site, and
-- update the TodoListClient to call the web site instead of IIS Express.
+- publish the Web App / Web APIs to the web site, and
+- update it client(s) to call the web site instead of IIS Express.
 
-### Create and Publish the TodoListService to an Azure Web Site
+### Create and Publish the `TodoListService-NativeDotNet` to an Azure Web Site
 
 1. Sign in to the [Azure portal](https://portal.azure.com).
-2. Click New in the top left-hand corner, select Web + Mobile --> Web App, select the hosting plan and region, and give your web site a name, for example, todolistservice-contoso.azurewebsites.net.  Click Create Web Site.
+2. Click New in the top left-hand corner, select Web + Mobile --> Web App, select the hosting plan and region, and give your web site a name, for example, `TodoListService-NativeDotNet-contoso.azurewebsites.net`.  Click Create Web Site.
 3. Once the web site is created, click on it to manage it.  For this set of steps, download the publish profile and save it.  Other deployment mechanisms, such as from source control, can also be used.
-4. Switch to Visual Studio and go to the TodoListService project.  Right click on the project in the Solution Explorer and select Publish.  Click Import, and import the publish profile that you just downloaded.
-5. On the Connection tab, update the Destination URL so that it is https, for example https://todolistservice-skwantoso.azurewebsites.net.  Click Next.
+4. Switch to Visual Studio and go to the TodoListService project.  Right click on the project in the Solution Explorer and select Publish.  Click Import, and import the publish profile that you downloaded.
+5. On the Connection tab, update the Destination URL so that it is https, for example [https://TodoListService-NativeDotNet-contoso.azurewebsites.net](https://TodoListService-NativeDotNet-contoso.azurewebsites.net). Click Next.
 6. On the Settings tab, make sure Enable Organizational Authentication is NOT selected.  Click Publish.
 7. Visual Studio will publish the project and automatically open a browser to the URL of the project.  If you see the default web page of the project, the publication was successful.
 
-### Update the Active Directory Tenant Application Registration
+### Update the Active Directory tenant application registration for `TodoListService-NativeDotNet`
 
 1. Navigate to the [Azure portal](https://portal.azure.com).
-2. On the top bar, click on your account and under the **Directory** list, choose the Active Directory tenant containing the TodoListService application.
-3. On the applications tab, select the TodoListService application.
-4. From the Settings -> Properties and Settings -> Reply URLs menus, update the Sign-On URL, and Reply URL fields to the address of your service, for example https://todolistservice-skwantoso.azurewebsites.net.  Save the configuration.
+2. On the top bar, click on your account and under the **Directory** list, choose the Active Directory tenant containing the `TodoListService-NativeDotNet` application.
+3. On the applications tab, select the `TodoListService-NativeDotNet` application.
+4. From the Settings -> Properties and Settings -> Reply URLs menus, update the Sign-On URL, and Reply URL fields to the address of your service, for example [https://TodoListService-NativeDotNet-contoso.azurewebsites.net](https://TodoListService-NativeDotNet-contoso.azurewebsites.net). Save the configuration.
 
-### Update the TodoListClient to call the TodoListService Running in Azure Web Sites
+### Update the `TodoListClient-NativeDotNet` to call the `TodoListService-NativeDotNet` Running in Azure Web Sites
 
-1. In Visual Studio, go to the TodoListClient project.
-2. Open `app.config`.  Only one change is needed - update the `todo:TodoListBaseAddress` key value to be the address of the website you published, for example, https://todolistservice-skwantoso.azurewebsites.net.
-3. Run the client!  If you are trying multiple different client types (for example, .Net, Windows Store, Android, iOS) you can have them all call this one published web API.
+1. In Visual Studio, go to the `TodoListClient-NativeDotNet` project.
+2. Open `TodoListClient\App.Config`.  Only one change is needed - update the `todo:TodoListBaseAddress` key value to be the address of the website you published,
+   for example, [https://TodoListService-NativeDotNet-contoso.azurewebsites.net](https://TodoListService-NativeDotNet-contoso.azurewebsites.net).
+3. Run the client! If you are trying multiple different client types (for example, .Net, Windows Store, Android, iOS) you can have them all call this one published web API.
 
-NOTE: Remember, the To Do list is stored in memory in this TodoListService sample. Azure Web Sites will spin down your web site if it is inactive, and your To Do list will get emptied. Also, if you increase the instance count of the web site, requests will be distributed among the instances and the To Do will not be the same on each instance.
+> NOTE: Remember, the To Do list is stored in memory in this TodoListService sample. Azure Web Sites will spin down your web site if it is inactive, and your To Do list will get emptied.
+Also, if you increase the instance count of the web site, requests will be distributed among the instances. To Do will, therefore, not be the same on each instance.
 
 ## About the code
 
@@ -154,7 +162,7 @@ public partial class Startup
 }
 ```
 
-In the `App_Start\Startup.Auth.cs` file the `ConfigureAuth(…)` method declare the uses of Windows Azure Active Directory bearer authentication and sets the application coordinates to communicate with Azure AD as  `WindowsAzureActiveDirectoryBearerAuthenticationOptions`.
+In the file, the `ConfigureAuth(…)` method declare the uses of Windows Azure Active Directory bearer authentication and sets the application coordinates to communicate with Azure AD as  `WindowsAzureActiveDirectoryBearerAuthenticationOptions`.
 
 ```C#
 public void ConfigureAuth(IAppBuilder app)
@@ -171,7 +179,7 @@ public void ConfigureAuth(IAppBuilder app)
 }
 ```
 
-- The `[Authorize]` attributes on the controller  protect the controllers and actions with JWT bearer authentication.  See for instance the `Controllers\TodoListController.cs` class with an authorize attribute.  This will force the user to sign in before accessing that page.
+- The `[Authorize]` attributes on the controller  protect the controllers and actions with JWT bearer authentication.  See for instance the `Controllers\TodoListController.cs` class with an authorize attribute.  This attribute will force the user to sign in before accessing that page.
 
 ```C#
 [Authorize]
@@ -222,6 +230,22 @@ First, in Visual Studio 2017 create an empty solution to host the  projects.  Th
 
 Finally, in the properties of the solution itself, set both projects as startup projects.
 
+## Community Help and Support
+
+Use [Stack Overflow](http://stackoverflow.com/questions/tagged/adal) to get support from the community.
+Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before.
+Make sure that your questions or comments are tagged with [`adal` `dotnet`].
+
+If you find a bug in the sample, please raise the issue on [GitHub Issues](../../issues).
+
+To provide a recommendation, visit the following [User Voice page](https://feedback.azure.com/forums/169401-azure-active-directory).
+
+## Contributing
+
+If you'd like to contribute to this sample, see [CONTRIBUTING.MD](/CONTRIBUTING.md).
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information, see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
 ## More information
 
 For more information, see ADAL.NET's conceptual documentation:
@@ -229,3 +253,5 @@ For more information, see ADAL.NET's conceptual documentation:
 - [Recommended pattern to acquire a token](https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/AcquireTokenSilentAsync-using-a-cached-token#recommended-pattern-to-acquire-a-token)
 - [Acquiring tokens interactively in public client applications](https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Acquiring-tokens-interactively---Public-client-application-flows)
 - [Customizing Token cache serialization](https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Token-cache-serialization)
+
+For more information about how OAuth 2.0 protocols work in this scenario and other scenarios, see [Authentication Scenarios for Azure AD](http://go.microsoft.com/fwlink/?LinkId=394414).

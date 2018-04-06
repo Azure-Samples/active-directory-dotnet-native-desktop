@@ -11,7 +11,10 @@ These scripts are:
 - `Configure.ps1` which:
   - creates Azure AD applications and their related objects (permissions, dependencies, secrets),
   - changes the configuration files in the C# and JavaScript projects.
-  - creates a summary file named `createdApps.html` in the folder from which you ran the script, and containing, for each Azure AD application it created, the identifier of the application, and url of its registration in the [Azure portal](https://portal.azure.com).
+  - creates a summary file named `createdApps.html` in the folder from which you ran the script, and containing, for each Azure AD application it created:
+    - the identifier of the application
+    - the AppId of the application
+    - the url of its registration in the [Azure portal](https://portal.azure.com).
 
 - `Cleanup.ps1` which cleans-up the Azure AD objects created by `Configure.ps1`. Note that this script does not revert the changes done in the configuration files, though. You will need to undo the change from source control (from Visual Studio, or from the command line using, for instance, git reset).
 
