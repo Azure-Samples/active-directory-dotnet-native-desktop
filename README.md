@@ -51,8 +51,12 @@ From your shell or command line:
 
 There are two projects in this sample. Each needs to be separately registered in your Azure AD tenant. To register these projects, you can:
 
-- either follow the steps in the paragraphs below (Step 2 and Step 3)
-- or use PowerShell scripts that **automatically** create for you the Azure AD applications and related objects (passwords, permissions, dependencies) and modify the projects' configuration files. If you want to do use this automation, read the instructions in [App Creation Scripts](./AppCreationScripts/AppCreationScripts.md)
+- either follow the steps in the paragraphs below ([Step 2](#step-2--register-the-sample-with-your-azure-active-directory-tenant) and [Step 3](#step-3--configure-the-sample-to-use-your-azure-ad-tenant))
+- or use PowerShell scripts that:
+  - **automatically** create for you the Azure AD applications and related objects (passwords, permissions, dependencies)
+  - modify the Visual Studio projects' configuration files.
+
+If you want to use this automation, read the instructions in [App Creation Scripts](./AppCreationScripts/AppCreationScripts.md)
 
 #### Register the TodoListService web API
 
@@ -73,7 +77,6 @@ There are two projects in this sample. Each needs to be separately registered in
 1. Click on **Create** to create the application.
 1. In the succeeding page, Find the *Application ID* value and copy it to the clipboard. You'll need it to configure the Visual Studio configuration file for this project.
 1. Then click on **Settings**, and choose **Properties**.
-1. For the App ID URI, replace the guid in the generated URI 'https://\<your_tenant_name\>/\<guid\>', with the name of your service, for example, 'https://\<your_tenant_name\>/TodoListClient-NativeDotNet' (replacing `<your_tenant_name>` with the name of your Azure AD tenant)
 1. Configure Permissions for your application. To that extent, in the Settings menu, choose the 'Required permissions' section and then,
    click on **Add**, then **Select an API**, and type `TodoListService-NativeDotNet` in the textbox. Then, click on  **Select Permissions** and select **Access 'TodoListService-NativeDotNet'**.
 
@@ -83,13 +86,13 @@ In the steps below, ClientID is the same as Application ID or AppId.
 
 Open the solution in Visual Studio to configure the projects
 
-### Configure the service project
+#### Configure the service project
 
 1. Open the `TodoListService\Web.Config` file
 1. Find the app key `ida:Tenant` and replace the existing value with your AAD tenant name.
 1. Find the app key `ida:Audience` and replace the existing value with the App ID URI you registered earlier for the TodoListService-NativeDotNet app. For instance use `https://<your_tenant_name>/TodoListService-NativeDotNet`, where `<your_tenant_name>` is the name of your Azure AD tenant.
 
-### Configure the client project
+#### Configure the client project
 
 1. Open the `TodoListClient\App.Config` file
 1. Find the app key `ida:Tenant` and replace the existing value with your AAD tenant name.
@@ -110,7 +113,7 @@ This project has one WebApp / Web API projects. To deploy them to Azure Web Site
 
 - create an Azure Web Site
 - publish the Web App / Web APIs to the web site, and
-- update it client(s) to call the web site instead of IIS Express.
+- update its client(s) to call the web site instead of IIS Express.
 
 ### Create and Publish the `TodoListService-NativeDotNet` to an Azure Web Site
 
