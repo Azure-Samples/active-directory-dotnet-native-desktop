@@ -1,4 +1,11 @@
 {
+  "Sample": {
+    "Title": "A .NET 4.5 WPF application that authenticates a user and calls web API using Azure AD and OAuth 2.0 access tokens.",
+    "Level": 200,
+    "Client": "Desktop (WPF)",
+    "Service": "ASP.NET Web API"
+  },
+
   /*
     This section describes the Azure AD Applications to configure, and their dependencies
   */
