@@ -164,7 +164,7 @@ Also, to avoid you re sign in each time your run the client application, the cod
 
 ### On the service side
 
-The `Startup.cs` file contains a partial implementation of the `Startup` class, which Configration() method calls ConfigureAuth()
+The `Startup.cs` file contains a partial implementation of the `Startup` class, which `Configuration()` method calls `ConfigureAuth()`
 
 ```C#
 public partial class Startup
