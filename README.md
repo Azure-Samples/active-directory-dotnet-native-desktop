@@ -72,24 +72,38 @@ of the Azure Active Directory window respectively as *Name* and *Directory ID*
 
 #### Register the service app (TodoListService-NativeDotNet)
 
-1. In the  **Azure Active Directory** pane, click on **App registrations** and choose **New application registration**.
-1. Enter a friendly name for the application, for example 'TodoListService-NativeDotNet' and select 'Web app / API' as the *Application Type*.
-1. For the *Sign-on URL*, enter the base URL for the sample. By default, this sample uses `https://localhost:44321/`.
-1. Click **Create** to create the application.
-1. In the succeeding page, Find the *Application ID* value and record it for later. You'll need it to configure the Visual Studio configuration file for this project.
-1. Then click on **Settings**, and choose **Properties**.
-1. For the App ID URI, replace the guid in the generated URI 'https://\<your_tenant_name\>/\<guid\>', with the name of your service, for example, 'https://\<your_tenant_name\>/TodoListService-NativeDotNet' (replacing `<your_tenant_name>` with the name of your Azure AD tenant)
+1. In the  **Azure Active Directory** pane, click on **[App registrations](https://go.microsoft.com/fwlink/?linkid=2083908)** and choose **New registration**.
+1. Enter a friendly name for the application, for example `TodoListService-NativeDotNet`.
+1. Leave **Supported account types** on the default setting of **Accounts in this organizational directory only**.
+1. For the *Redirect URI (optional)*, select "Web" from the dropdown, and enter the base URL for the sample. By default, this sample uses `https://localhost:44321/`.
+1. Click **Register** to create the application.
+1. In the succeeding page, Find the *Application (client) ID* value and record it for later. You'll need it to configure the Visual Studio configuration file for this project.
+1. In the list of pages for the app, select on **Expose an API**
+   - Select **Add a scope**
+   - accept the proposed Application ID URI (api://{clientId}) by selecting **Save and Continue**
+   - Enter the following parameters
+     - for **Scope name** use `access_as_user`
+     - Keep **Admins and users** for **Who can consent**
+     - in **Admin consent display name** type `Access TodoListService-NativeDotNet as a user`
+     - in **Admin consent description** type `Accesses the TodoListService-NativeDotNet as a user`
+     - in **User consent display name** type `Access TodoListService-NativeDotNet as a user`
+     - in **User consent description** type `Accesses the TodoListService-NativeDotNet as a user`
+     - Keep **State** as **Enabled**
+     - Select **Add scope**
 
 #### Register the client app (TodoListClient-NativeDotNet)
 
-1. In the  **Azure Active Directory** pane, click on **App registrations** and choose **New application registration**.
-1. Enter a friendly name for the application, for example 'TodoListClient-NativeDotNet' and select 'Native' as the *Application Type*.
-1. For the *Redirect URI*, enter `https://<your_tenant_name>/TodoListClient-NativeDotNet`, replacing `<your_tenant_name>` with the name of your Azure AD tenant.
-1. Click **Create** to create the application.
-1. In the succeeding page, Find the *Application ID* value and record it for later. You'll need it to configure the Visual Studio configuration file for this project.
-1. Then click on **Settings**, and choose **Properties**.
-1. Configure Permissions for your application. To that extent, in the Settings menu, choose the 'Required permissions' section and then,
-   click on **Add**, then **Select an API**, and type `TodoListService-NativeDotNet` in the textbox. Then, click on  **Select Permissions** and select **Access 'TodoListService-NativeDotNet'**.
+1. In the  **Azure Active Directory** pane, click on **[App registrations](https://go.microsoft.com/fwlink/?linkid=2083908)** and choose **New registration**.
+1. Enter a friendly name for the application, for example `TodoListClient-NativeDotNet`.
+1. Leave **Supported account types** on the default setting of **Accounts in this organizational directory only**.
+1. For the *Redirect URI (optional)*, select "Public client (mobile & desktop)" from the dropdown, and enter the base URL for the sample. By default, this sample uses `https://localhost:44321/`.
+1. Click **Register** to create the application.
+1. In the succeeding page, Find the *Application (client) ID* value and record it for later. You'll need it to configure the Visual Studio configuration file for this project.
+1. Configure Permissions for your application. To do so, select **API Permissions** and select **Add a permission** under the *API Permissions* section.
+   - Ensure that the **My APIs** tab is selected
+   - In the list of APIs, select the API `TodoListService-NativeDotNet`.
+   - In the **Delegated permissions** section, ensure that the right permissions are checked: `access_as_user`. Use the search box if necessary.
+   - Select the **Add permissions** button
 
 ### Step 3:  Configure the sample to use your Azure AD tenant
 
@@ -139,9 +153,9 @@ This project has one WebApp / Web API projects. To deploy them to Azure Web Site
 ### Update the Active Directory tenant application registration for `TodoListService-NativeDotNet`
 
 1. Navigate to the [Azure portal](https://portal.azure.com).
-1. On the top bar, click on your account and under the **Directory** list, choose the Active Directory tenant containing the `TodoListService-NativeDotNet` application.
-1. On the applications tab, select the `TodoListService-NativeDotNet` application.
-1. From the Settings -> Reply URLs menu, update the Sign-On URL, and Reply URL fields to the address of your service, for example [https://TodoListService-NativeDotNet-contoso.azurewebsites.net](https://TodoListService-NativeDotNet-contoso.azurewebsites.net). Save the configuration.
+1. On the top bar, click on your account and under the **Directory** list, choose the Active Directory tenant containing the `TodoListService-NativeDotNet` application. And select **Azure Active Directory**
+1. On the **[App registrations](https://go.microsoft.com/fwlink/?linkid=2083908)** tab, select the `TodoListService-NativeDotNet` application.
+1. From the Authentication -> Redirect URIs menu, update the Redirect URI field to the address of your service, for example [https://TodoListService-NativeDotNet-contoso.azurewebsites.net](https://TodoListService-NativeDotNet-contoso.azurewebsites.net). Save the configuration.
 
 ### Update the `TodoListClient-NativeDotNet` to call the `TodoListService-NativeDotNet` Running in Azure Web Sites
 
