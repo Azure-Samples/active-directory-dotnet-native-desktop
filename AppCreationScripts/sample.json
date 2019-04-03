@@ -3,7 +3,8 @@
     "Title": "A .NET 4.5 WPF application that authenticates a user and calls web API using Azure AD and OAuth 2.0 access tokens.",
     "Level": 200,
     "Client": "Desktop (WPF)",
-    "Service": "ASP.NET Web API"
+    "Service": "ASP.NET Web API",
+    "RepositoryUrl": "https://github.com/AzureSamples/active-directory-dotnet-native-desktop"
   },
 
   /*
@@ -13,13 +14,16 @@
     {
       "Id": "service",
       "Name": "TodoListService-NativeDotNet",
-      "IsPublicClient": false,
+      "Kind": "WebApi", /* SinglePageApplication, WebApp, Mobile, UWP, Desktop, Daemon, WebApi, Browserless */
+      "Audience": "AzureADMyOrg", /* AzureADMyOrg, AzureADMultipleOrgs, AzureADandPersonalMicrosoftAccount, PersonalMicrosoftAccount */
       "HomePage": "https://localhost:44321/"
     },
     {
       "Id": "client",
       "Name": "TodoListClient-NativeDotNet",
-      "IsPublicClient": true,
+      "Kind": "Desktop", /* SinglePageApplication, WebApp, Mobile, UWP, Desktop, Daemon, WebApi, Browserless */
+      "Audience": "AzureADMyOrg", /* AzureADMyOrg, AzureADMultipleOrgs, AzureADandPersonalMicrosoftAccount, PersonalMicrosoftAccount */
+      "UsesROPCOrIWA": false,
       "RequiredResourcesAccess": [
         {
           "Resource": "service",
