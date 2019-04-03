@@ -80,7 +80,8 @@ of the Azure Active Directory window respectively as *Name* and *Directory ID*
 1. In the succeeding page, Find the *Application (client) ID* value and record it for later. You'll need it to configure the Visual Studio configuration file for this project.
 1. In the list of pages for the app, select on **Expose an API**
    - Select **Add a scope**
-   - accept the proposed Application ID URI (api://{clientId}) by selecting **Save and Continue**
+   - change the proposed application ID (api://{clientId}) by `https://<your_tenant_name>/TodoListService-NativeDotNet` (replacing `your_tenant_name` with the name of your Azure AD tenant) 
+   - Select **Save and Continue**
    - Enter the following parameters
      - for **Scope name** use `access_as_user`
      - Keep **Admins and users** for **Who can consent**
