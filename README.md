@@ -11,7 +11,6 @@ endpoint: AAD V1
 
 ![Build badge](https://identitydivision.visualstudio.com/_apis/public/build/definitions/a7934fdd-dcde-4492-a406-7fad6ac00e17/49/badge)
 
-Near the top of the sample's README.md, add the following note:
 > There's a newer version of this sample! Check it out: https://github.com/azure-samples/ms-identity-dotnet-desktop-msgraph
 >
 > This newer sample takes advantage of the Microsoft identity platform (formerly Azure AD v2.0).
