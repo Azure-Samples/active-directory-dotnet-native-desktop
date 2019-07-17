@@ -89,7 +89,7 @@ of the Azure Active Directory window respectively as *Name* and *Directory ID*
    - change the proposed application ID (api://{clientId}) by `https://<your_tenant_name>/TodoListService-NativeDotNet` (replacing `your_tenant_name` with the name of your Azure AD tenant) 
    - Select **Save and Continue**
    - Enter the following parameters
-     - for **Scope name** use `access_as_user`
+     - for **Scope name** use `user_impersonation`
      - Keep **Admins and users** for **Who can consent**
      - in **Admin consent display name** type `Access TodoListService-NativeDotNet as a user`
      - in **Admin consent description** type `Accesses the TodoListService-NativeDotNet as a user`
